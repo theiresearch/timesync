@@ -173,11 +173,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <svg className="h-8 w-8" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-              <rect width="1000" height="1000" fill="#000"/>
-              <circle cx="700" cy="400" r="110" fill="#fff"/>
-              <text x="700" y="920" fontSize="750" fontWeight="bold" fill="#fff" textAnchor="middle" dominantBaseline="middle">l</text>
-            </svg>
+            <img src="/generated-icon.png" alt="The I Research" className="h-8 w-8 object-contain" />
             <span className="text-xl font-semibold">The I Research</span>
           </motion.div>
         </div>
