@@ -297,13 +297,18 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="meeting-date" className="block mb-2">Date</Label>
+                      <Label htmlFor="meeting-date" className="block mb-2">Date (YYYY.MM.DD)</Label>
                       <Input 
                         id="meeting-date" 
                         type="date"
                         value={meetingDate ? meetingDate.toISOString().split('T')[0] : ''}
                         onChange={(e) => setMeetingDate(e.target.value ? new Date(e.target.value) : undefined)}
                       />
+                      {meetingDate && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {meetingDate.toISOString().split('T')[0].replace(/-/g, '.')}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="meeting-time" className="block mb-2">Time</Label>
