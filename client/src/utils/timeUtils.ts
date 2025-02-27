@@ -3,7 +3,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from '../types';
 
 const TIME_FORMAT = 'HH:mm';
-const DATE_FORMAT = 'EEE, MMM d';
+const DATE_FORMAT = 'yyyy.MM.dd';
 const HOUR_FORMAT = 'HH:mm';
 
 export const timezones = [

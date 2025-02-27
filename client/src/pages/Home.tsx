@@ -90,7 +90,7 @@ export default function Home() {
   const generateMeetingProposal = () => {
     if (!meetingDate || !meetingTime) return;
     
-    const formattedDate = meetingDate.toISOString().split('T')[0];
+    const formattedDate = meetingDate.toISOString().split('T')[0].replace(/-/g, '.');
     
     let proposal = `📅 Meeting Proposal\n\n`;
     
@@ -103,24 +103,22 @@ export default function Home() {
     const tzInfo = timezones.find(tz => tz.value === userTimezone);
     const tzDisplay = tzInfo ? tzInfo.name : userTimezone;
     const refFlag = getCountryFlag(userTimezone);
-    const myTime = formattedDate + ' ' + meetingTime;
     
-    proposal += `${refFlag} ${tzDisplay}: ${myTime}\n\n`;
+    proposal += `${refFlag} ${tzDisplay}: ${formattedDate} ${meetingTime}\n\n`;
     
     // Other timezones
     timeZones.forEach(zone => {
       const convertedTime = convertTime(
         meetingTime,
-        formattedDate,
+        meetingDate.toISOString().split('T')[0],
         userTimezone,
         zone.timezone
       );
       
       const tzInfo = timezones.find(tz => tz.value === zone.timezone);
       const tzDisplay = tzInfo ? tzInfo.name : zone.timezone;
-      const timeStr = formattedDate + ' ' + convertedTime.time;
       
-      proposal += `${zone.flag} ${tzDisplay}: ${timeStr}\n`;
+      proposal += `${zone.flag} ${tzDisplay}: ${convertedTime.date} ${convertedTime.time}\n`;
     });
     
     setGeneratedText(proposal);
@@ -193,7 +191,7 @@ export default function Home() {
                       </div>
                       {meetingDate && meetingTime && (
                         <div className="text-xs text-muted-foreground mt-1">
-                          {meetingDate.toISOString().split('T')[0]} {meetingTime}
+                          {meetingDate.toISOString().split('T')[0].replace(/-/g, '.')} {meetingTime}
                         </div>
                       )}
                     </div>
@@ -243,7 +241,7 @@ export default function Home() {
                           <div className="font-medium">{displayName}</div>
                           {convertedTime && (
                             <div className="text-xs text-muted-foreground mt-1">
-                              {convertedTime.time} • {convertedTime.date}
+                              {convertedTime.date.replace(/-/g, '.')} {convertedTime.time}
                             </div>
                           )}
                         </div>
