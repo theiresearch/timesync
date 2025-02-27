@@ -6,7 +6,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Link href="/">
-            <span className="text-2xl font-semibold text-primary cursor-pointer">🕒 TimeSync</span>
+            <a href="https://timesync.theiresearch.com" target="_blank" rel="noopener noreferrer" className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-90 transition-opacity">🕒 TimeSync</a>
           </Link>
         </div>
         <div className="hidden md:flex items-center space-x-6">
