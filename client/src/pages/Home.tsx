@@ -469,7 +469,7 @@ export default function Home() {
             </span>
             <div className="flex gap-4 items-center">
               <a
-                href="https://x.com"
+                href="https://x.com/theiresearch"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -477,7 +477,7 @@ export default function Home() {
                 <FontAwesomeIcon icon={faXTwitter} className="h-4 w-4" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/theiresearch"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
