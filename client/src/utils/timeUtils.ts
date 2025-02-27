@@ -196,12 +196,19 @@ export function addLocalTimeToTeamMembers(
   referenceDate: string = new Date().toISOString().split('T')[0]
 ): TeamMemberWithLocalTime[] {
   return teamMembers.map(member => {
+    // Get current time in the team member's timezone
     const { time, date } = getCurrentTimeInTimezone(member.timeZone);
-    const currentHour = new Date().getHours();
-    const workStart = parseInt(member.workingHoursStart.split(':')[0]);
-    const workEnd = parseInt(member.workingHoursEnd.split(':')[0]);
     
-    const isWorkingHours = currentHour >= workStart && currentHour < workEnd;
+    // Parse the current time and working hours in the member's timezone
+    const now = parseISO(`${date}T${time}`);
+    
+    // Parse the working hours in the local timezone
+    const todayStr = formatInTimeZone(new Date(), member.timeZone, 'yyyy-MM-dd');
+    const workStart = parseISO(`${todayStr}T${member.workingHoursStart}`);
+    const workEnd = parseISO(`${todayStr}T${member.workingHoursEnd}`);
+    
+    // Check if current time is within working hours
+    const isWorkingHours = now >= workStart && now < workEnd;
     
     return {
       ...member,
