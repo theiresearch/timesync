@@ -130,32 +130,19 @@ export default function Home() {
     setEditableProposal(proposal);
   };
   
-  // Generate meeting times table for all zones
-  const generateTimeTable = () => {
+  // Get timezone info
+  const getDisplayTimeForZone = (timezone: string) => {
     if (!meetingDate || !meetingTime) return null;
     
     const formattedDate = meetingDate.toISOString().split('T')[0];
-    const timeInfo = [];
+    const convertedTime = convertTime(
+      meetingTime,
+      formattedDate,
+      userTimezone,
+      timezone
+    );
     
-    // Add user's timezone
-    const tzInfo = timezones.find(tz => tz.value === userTimezone);
-    timeInfo.push({
-      timezone: userTimezone,
-      displayName: tzInfo ? tzInfo.name : userTimezone,
-      flag: '🏠',
-    });
-    
-    // Add other timezones
-    timeZones.forEach(zone => {
-      const tzInfo = timezones.find(tz => tz.value === zone.timezone);
-      timeInfo.push({
-        timezone: zone.timezone,
-        displayName: tzInfo ? tzInfo.name : zone.timezone,
-        flag: zone.flag,
-      });
-    });
-    
-    return timeInfo;
+    return convertedTime;
   };
   
   const copyToClipboard = (text: string) => {
@@ -180,8 +167,6 @@ export default function Home() {
   const handleGenerateTimes = () => {
     generateMeetingProposal();
   };
-  
-  const timeInfo = generateTimeTable();
   
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F7FA]">
@@ -236,11 +221,22 @@ export default function Home() {
                   const tzInfo = timezones.find(tz => tz.value === zone.timezone);
                   const displayName = tzInfo ? tzInfo.name : zone.timezone;
                   
+                  // Show converted time if meeting date and time are selected
+                  const convertedTime = meetingDate && meetingTime ? 
+                    getDisplayTimeForZone(zone.timezone) : null;
+                  
                   return (
                     <div key={zone.id} className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
                       <div className="flex items-center gap-2">
                         <span className="text-xl">{zone.flag}</span>
-                        <span className="font-medium">{displayName}</span>
+                        <div>
+                          <div className="font-medium">{displayName}</div>
+                          {convertedTime && (
+                            <div className="text-xs text-muted-foreground mt-1">
+                              {convertedTime.time} • {convertedTime.date}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <Button 
                         variant="ghost" 
@@ -282,23 +278,28 @@ export default function Home() {
         </div>
         
         {/* Meeting Settings */}
-        <Card className="mt-4 sm:mt-6">
-          <CardHeader className="pb-2 sm:pb-4">
-            <CardTitle className="text-lg">Meeting Details</CardTitle>
-            <CardDescription>Set your meeting time and generate a proposal</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label className="block mb-2">Date</Label>
-                <Calendar
-                  mode="single"
-                  selected={meetingDate}
-                  onSelect={setMeetingDate}
-                  className="border rounded-md p-2"
-                />
-              </div>
-              
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-6">
+          <Card>
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-lg">Meeting Date</CardTitle>
+              <CardDescription>Select when the meeting occurs</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Calendar
+                mode="single"
+                selected={meetingDate}
+                onSelect={setMeetingDate}
+                className="mx-auto border rounded-md"
+              />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-lg">Meeting Time & Link</CardTitle>
+              <CardDescription>Set meeting details and generate a proposal</CardDescription>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="meeting-time" className="block mb-2">Time</Label>
@@ -321,17 +322,15 @@ export default function Home() {
                 </div>
                 
                 <Button className="w-full" onClick={handleGenerateTimes}>
-                  Generate Times
+                  Generate Proposal
                 </Button>
-              </div>
-              
-              <div>
+                
                 {generatedText && (
-                  <>
+                  <div className="mt-4">
                     <Label htmlFor="proposal" className="block mb-2">Meeting Proposal</Label>
                     <Textarea
                       id="proposal"
-                      className="h-[250px] font-mono text-sm"
+                      className="h-[150px] font-mono text-sm"
                       value={editableProposal}
                       onChange={(e) => setEditableProposal(e.target.value)}
                     />
@@ -341,56 +340,14 @@ export default function Home() {
                     >
                       <Copy className="h-4 w-4 mr-2" /> Copy Proposal
                     </Button>
-                  </>
+                  </div>
                 )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Time Zone Comparison */}
-        {timeInfo && generatedText && (
-          <Card className="mt-4 sm:mt-6">
-            <CardHeader className="pb-2 sm:pb-4">
-              <CardTitle className="text-lg">Time Comparison</CardTitle>
-              <CardDescription>Meeting time across all time zones</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border overflow-hidden">
-                <div className="bg-muted px-3 py-2 font-medium border-b text-sm sm:text-base">
-                  {meetingDate?.toLocaleDateString()} at {meetingTime}
-                </div>
-                <div className="divide-y">
-                  {timeInfo.map((zone, idx) => {
-                    const convertedTime = convertTime(
-                      meetingTime,
-                      meetingDate?.toISOString().split('T')[0] || '',
-                      userTimezone,
-                      zone.timezone
-                    );
-                    
-                    return (
-                      <div key={idx} className="flex items-center justify-between p-2 sm:p-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg sm:text-xl">{zone.flag}</span>
-                          <span className="font-medium text-sm sm:text-base">{zone.displayName}</span>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-medium text-sm sm:text-base">
-                            {convertedTime.time}
-                          </div>
-                          <div className="text-xs sm:text-sm text-muted-foreground">
-                            {convertedTime.date}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
             </CardContent>
           </Card>
-        )}
+        </div>
+        
+
       </main>
       
       <Footer />
