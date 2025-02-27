@@ -1,5 +1,5 @@
 import { format, addHours, parse, formatISO, parseISO, isWithinInterval } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
+import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from '../types';
 
 const TIME_FORMAT = 'HH:mm';
@@ -127,19 +127,23 @@ export function convertTime(
     // Parse the date
     const [year, month, day] = date.split('-').map(num => parseInt(num));
     
-    // Create a source date in UTC (to avoid any local timezone interference)
-    const sourceDate = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
+    // FIXED APPROACH: Create a date that's properly interpreted in the source timezone
+    // 1. Format the date and time as a string in ISO format
+    const dateTimeStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
     
-    // Format in source timezone first to handle DST correctly
-    const sourceTimeStr = formatInTimeZone(sourceDate, actualFromTimezone, 'yyyy-MM-dd\'T\'HH:mm:ssXXX');
+    // 2. Create a date in the local timezone (browser's timezone)
+    const localDate = new Date(dateTimeStr);
     
-    // Parse that string which now has the timezone offset correctly applied
-    const sourceWithTZ = new Date(sourceTimeStr);
+    // 3. Convert to the source timezone
+    const sourceZonedDate = toZonedTime(localDate, actualFromTimezone);
     
-    // Format in target timezone
+    // 4. Convert from source timezone to target timezone
+    const targetDate = formatInTimeZone(sourceZonedDate, actualToTimezone, DATE_FORMAT);
+    const targetTime = formatInTimeZone(sourceZonedDate, actualToTimezone, TIME_FORMAT);
+    
     return {
-      time: formatInTimeZone(sourceWithTZ, actualToTimezone, TIME_FORMAT),
-      date: formatInTimeZone(sourceWithTZ, actualToTimezone, DATE_FORMAT)
+      time: targetTime,
+      date: targetDate
     };
   } catch (error) {
     console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone });
