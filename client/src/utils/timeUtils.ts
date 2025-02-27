@@ -7,16 +7,17 @@ const DATE_FORMAT = 'EEE, MMM d';
 const HOUR_FORMAT = 'HH:mm';
 
 export const timezones = [
-  { name: 'US/Eastern (New York)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT' },
-  { name: 'US/Pacific (Los Angeles)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT' },
-  { name: 'UK (London)', value: 'Europe/London', offset: '+00:00', abbr: 'BST' },
-  { name: 'Europe/Paris', value: 'Europe/Paris', offset: '+01:00', abbr: 'CEST' },
-  { name: 'Asia/Tokyo (Japan)', value: 'Asia/Tokyo', offset: '+09:00', abbr: 'JST' },
-  { name: 'Australia/Sydney', value: 'Australia/Sydney', offset: '+10:00', abbr: 'AEST' },
-  { name: 'Pacific/Auckland (New Zealand)', value: 'Pacific/Auckland', offset: '+12:00', abbr: 'NZST' },
-  { name: 'Asia/Shanghai (China)', value: 'Asia/Shanghai', offset: '+08:00', abbr: 'CST' },
-  { name: 'Asia/Kolkata (India)', value: 'Asia/Kolkata', offset: '+05:30', abbr: 'IST' },
-  { name: 'Europe/Berlin (Germany)', value: 'Europe/Berlin', offset: '+01:00', abbr: 'CEST' },
+  { name: 'UTC', value: 'UTC', offset: '+00:00', abbr: 'UTC' },
+  { name: 'New York (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT' },
+  { name: 'Los Angeles (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT' },
+  { name: 'London (UTC+00:00)', value: 'Europe/London', offset: '+00:00', abbr: 'BST' },
+  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', offset: '+01:00', abbr: 'CEST' },
+  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', offset: '+01:00', abbr: 'CEST' },
+  { name: 'Mumbai (UTC+05:30)', value: 'Asia/Kolkata', offset: '+05:30', abbr: 'IST' },
+  { name: 'Shanghai (UTC+08:00)', value: 'Asia/Shanghai', offset: '+08:00', abbr: 'CST' },
+  { name: 'Tokyo (UTC+09:00)', value: 'Asia/Tokyo', offset: '+09:00', abbr: 'JST' },
+  { name: 'Sydney (UTC+10:00)', value: 'Australia/Sydney', offset: '+10:00', abbr: 'AEST' },
+  { name: 'Auckland (UTC+12:00)', value: 'Pacific/Auckland', offset: '+12:00', abbr: 'NZST' },
 ];
 
 // Convert time between different time zones
