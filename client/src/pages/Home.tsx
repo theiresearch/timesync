@@ -202,10 +202,12 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="h-8 w-8 bg-primary text-white flex items-center justify-center rounded-sm">
-              <span className="font-bold">i</span>
-            </div>
-            <span className="text-xl font-semibold">The I Research</span>
+            <img
+              src="/generated-icon.png"
+              alt="TimeSync"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="text-xl font-semibold">TimeSync</span>
           </motion.div>
         </div>
       </header>
@@ -463,11 +465,11 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} The I Research
+              © {new Date().getFullYear()} TimeSync
             </span>
             <div className="flex gap-4">
               <a
-                href="https://x.com/theiresearch"
+                href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -475,7 +477,7 @@ export default function Home() {
                 <FontAwesomeIcon icon={faXTwitter} className="h-4 w-4" />
               </a>
               <a
-                href="https://github.com/theiresearch"
+                href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
