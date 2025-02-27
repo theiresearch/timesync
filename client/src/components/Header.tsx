@@ -5,9 +5,10 @@ export default function Header() {
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <Link href="/">
-            <a href="https://timesync.theiresearch.com" target="_blank" rel="noopener noreferrer" className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-90 transition-opacity">🕒 TimeSync</a>
-          </Link>
+          <div className="flex items-center">
+            <span className="text-2xl font-semibold text-primary">🕒</span>
+            <a href="https://timesync.theiresearch.com" target="_blank" rel="noopener noreferrer" className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-90 transition-opacity ml-1">TimeSync</a>
+          </div>
         </div>
         <div className="hidden md:flex items-center space-x-6">
           <span className="text-neutral-700 hover:text-primary transition-colors cursor-pointer">Features</span>
