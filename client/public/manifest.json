@@ -1,7 +1,7 @@
 {
   "name": "TimeSync",
   "short_name": "TimeSync",
-  "description": "A sophisticated web-based time zone coordination tool",
+  "description": "Coordinate meetings across global time zones",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
