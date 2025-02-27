@@ -298,17 +298,22 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="meeting-date" className="block mb-2">Date (YYYY.MM.DD)</Label>
-                      <Input 
-                        id="meeting-date" 
-                        type="date"
-                        value={meetingDate ? meetingDate.toISOString().split('T')[0] : ''}
-                        onChange={(e) => setMeetingDate(e.target.value ? new Date(e.target.value) : undefined)}
-                      />
-                      {meetingDate && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {meetingDate.toISOString().split('T')[0].replace(/-/g, '.')}
-                        </p>
-                      )}
+                      {/* Native date picker with formatted display */}
+                      <div className="relative">
+                        <Input 
+                          id="meeting-date" 
+                          type="date"
+                          className="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10"
+                          value={meetingDate ? meetingDate.toISOString().split('T')[0] : ''}
+                          onChange={(e) => setMeetingDate(e.target.value ? new Date(e.target.value) : undefined)}
+                        />
+                        <Input 
+                          readOnly
+                          value={meetingDate ? meetingDate.toISOString().split('T')[0].replace(/-/g, '.') : 'Select date...'}
+                          className="pointer-events-none border pr-8"
+                        />
+                        <CalendarIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
+                      </div>
                     </div>
                     <div>
                       <Label htmlFor="meeting-time" className="block mb-2">Time</Label>
