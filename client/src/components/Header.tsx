@@ -1,4 +1,5 @@
 import { Link } from 'wouter';
+import { Clock } from 'lucide-react';
 
 export default function Header() {
   return (
@@ -6,8 +7,18 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <div className="flex items-center">
-            <span className="text-2xl font-semibold text-primary">🕒</span>
-            <a href="https://timesync.theiresearch.com" target="_blank" rel="noopener noreferrer" className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-90 transition-opacity ml-1">TimeSync</a>
+            <Clock className="h-6 w-6 text-primary" />
+            <a 
+              href="https://timesync.theiresearch.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-90 transition-opacity ml-2"
+            >
+              TimeSync
+            </a>
+            <span className="ml-2 text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600 hidden sm:inline-block">
+              timesync.theiresearch.com
+            </span>
           </div>
         </div>
         <div className="hidden md:flex items-center space-x-6">
