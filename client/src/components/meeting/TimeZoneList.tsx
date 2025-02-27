@@ -90,7 +90,7 @@ export default function TimeZoneList() {
                   </SelectTrigger>
                   <SelectContent>
                     {timezones.map((tz) => (
-                      <SelectItem key={tz.value} value={tz.value}>
+                      <SelectItem key={tz.id || tz.value} value={tz.value}>
                         {tz.name} ({tz.abbr})
                       </SelectItem>
                     ))}

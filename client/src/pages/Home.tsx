@@ -256,7 +256,7 @@ export default function Home() {
                     </SelectTrigger>
                     <SelectContent>
                       {timezones.map((tz) => (
-                        <SelectItem key={tz.value} value={tz.value}>
+                        <SelectItem key={tz.id || tz.value} value={tz.value}>
                           {getCountryFlag(tz.value)} {tz.name}
                         </SelectItem>
                       ))}
@@ -326,7 +326,7 @@ export default function Home() {
                       </SelectTrigger>
                       <SelectContent>
                         {timezones.map((tz) => (
-                          <SelectItem key={tz.value} value={tz.value}>
+                          <SelectItem key={tz.id || tz.value} value={tz.value}>
                             {getCountryFlag(tz.value)} {tz.name}
                           </SelectItem>
                         ))}

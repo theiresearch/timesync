@@ -4,6 +4,7 @@ export interface TimeZone {
   value: string;
   offset: string;
   abbr: string;
+  id?: string;
 }
 
 // Team Member Types
