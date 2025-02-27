@@ -195,9 +195,9 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
       <header className="fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <motion.div
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 w-[200px]"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
@@ -209,6 +209,7 @@ export default function Home() {
             />
             <span className="text-xl font-semibold">TimeSync</span>
           </motion.div>
+          <div></div> {/* Empty div to balance the flex container */}
         </div>
       </header>
 
@@ -250,7 +251,7 @@ export default function Home() {
                     </div>
                   </div>
                   <Select value={userTimezone} onValueChange={setUserTimezone}>
-                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted">
+                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted focus-ring-fix">
                       <Settings className="h-4 w-4" />
                       <span className="sr-only">Change timezone</span>
                     </SelectTrigger>
