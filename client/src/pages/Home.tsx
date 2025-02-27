@@ -418,7 +418,7 @@ export default function Home() {
                             className="w-full" 
                             onClick={() => copyToClipboard(proposalText)}
                           >
-                            Copy Proposal
+                            <Copy className="h-4 w-4 mr-2" /> Copy Proposal
                           </Button>
                         </CardContent>
                       </Card>
