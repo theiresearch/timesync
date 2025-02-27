@@ -464,10 +464,10 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} The I Research
+            <span className="text-xs text-muted-foreground flex items-center">
+              © {new Date().getFullYear()} <a href="https://timesync.theiresearch.com" className="ml-1 hover:text-foreground transition-colors">TimeSync.theiresearch.com</a>
             </span>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <a
                 href="https://x.com"
                 target="_blank"
@@ -483,6 +483,16 @@ export default function Home() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <FontAwesomeIcon icon={faGithub} className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://theiresearch.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </a>
             </div>
           </motion.div>
