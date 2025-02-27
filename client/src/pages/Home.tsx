@@ -203,9 +203,9 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <img
-              src="/generated-icon.png"
-              alt="TimeSync"
-              className="h-8 w-8 object-contain"
+              src="/logo.png"
+              alt="The I Research Logo"
+              className="w-8 h-8 object-cover rounded"
             />
             <span className="text-xl font-semibold">TimeSync</span>
           </motion.div>
