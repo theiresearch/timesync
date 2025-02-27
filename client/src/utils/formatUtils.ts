@@ -14,7 +14,7 @@ const countryToFlagEmoji: Record<string, string> = {
   'Italy': '🇮🇹',
   'Spain': '🇪🇸',
   'China': '🇨🇳',
-  'India': '🇮🇳',
+  'Hong Kong': '🇭🇰',
   'Brazil': '🇧🇷',
   'Russia': '🇷🇺',
   'Mexico': '🇲🇽',
@@ -27,8 +27,14 @@ const countryToFlagEmoji: Record<string, string> = {
   'Denmark': '🇩🇰',
   'Finland': '🇫🇮',
   'Netherlands': '🇳🇱',
+  'Belgium': '🇧🇪',
+  'Hungary': '🇭🇺',
   'Switzerland': '🇨🇭',
   'South Africa': '🇿🇦',
+  'UAE': '🇦🇪',
+  'United Arab Emirates': '🇦🇪',
+  'Azerbaijan': '🇦🇿',
+  'Monaco': '🇲🇨',
 };
 
 // Get country flag emoji from country name or timezone string
@@ -60,16 +66,24 @@ export const getCountryFlag = (countryOrTimezone: string): string => {
   if (countryOrTimezone === 'Europe/Berlin') return '🇩🇪';
   if (countryOrTimezone === 'Europe/Rome') return '🇮🇹';
   if (countryOrTimezone === 'Europe/Madrid') return '🇪🇸';
+  if (countryOrTimezone === 'Europe/Monaco') return '🇲🇨';
+  if (countryOrTimezone === 'Europe/Amsterdam') return '🇳🇱';
+  if (countryOrTimezone === 'Europe/Brussels') return '🇧🇪';
+  if (countryOrTimezone === 'Europe/Budapest') return '🇭🇺';
   if (countryOrTimezone === 'Asia/Tokyo') return '🇯🇵';
   if (countryOrTimezone === 'Asia/Seoul') return '🇰🇷';
   if (countryOrTimezone === 'Asia/Shanghai') return '🇨🇳';
-  if (countryOrTimezone === 'Asia/Kolkata') return '🇮🇳';
+  if (countryOrTimezone === 'Asia/Hong_Kong') return '🇭🇰';
   if (countryOrTimezone === 'Asia/Singapore') return '🇸🇬';
-  if (countryOrTimezone === 'Australia/Sydney') return '🇦🇺';
+  if (countryOrTimezone === 'Asia/Baku') return '🇦🇿';
+  if (countryOrTimezone === 'Asia/Dubai') return '🇦🇪';
+  if (countryOrTimezone === 'Australia/Melbourne') return '🇦🇺';
   if (countryOrTimezone === 'America/New_York') return '🇺🇸';
   if (countryOrTimezone === 'America/Los_Angeles') return '🇺🇸';
   if (countryOrTimezone === 'America/Chicago') return '🇺🇸';
   if (countryOrTimezone === 'America/Toronto') return '🇨🇦';
+  if (countryOrTimezone === 'America/Mexico_City') return '🇲🇽';
+  if (countryOrTimezone === 'America/Sao_Paulo') return '🇧🇷';
   if (countryOrTimezone === 'Pacific/Auckland') return '🇳🇿';
   
   return regionToCountry[region] || '🌍';
@@ -84,17 +98,25 @@ const timezoneToAbbr: Record<string, string> = {
   'America/Anchorage': 'AKDT',
   'America/Phoenix': 'MST',
   'America/Honolulu': 'HST',
+  'America/Mexico_City': 'CST',
+  'America/Toronto': 'EDT',
+  'America/Sao_Paulo': 'BRT',
   'Europe/London': 'BST',
   'Europe/Paris': 'CEST',
   'Europe/Berlin': 'CEST',
   'Europe/Rome': 'CEST',
   'Europe/Madrid': 'CEST',
+  'Europe/Monaco': 'CEST',
+  'Europe/Amsterdam': 'CEST',
+  'Europe/Budapest': 'CEST',
+  'Europe/Brussels': 'CEST',
+  'Asia/Baku': 'AZT',
+  'Asia/Dubai': 'GST',
   'Asia/Tokyo': 'JST',
   'Asia/Shanghai': 'CST',
+  'Asia/Hong_Kong': 'HKT',
   'Asia/Seoul': 'KST',
   'Asia/Singapore': 'SGT',
-  'Asia/Kolkata': 'IST',
-  'Australia/Sydney': 'AEST',
   'Australia/Melbourne': 'AEST',
   'Australia/Perth': 'AWST',
   'Pacific/Auckland': 'NZST',
