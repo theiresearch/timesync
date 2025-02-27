@@ -202,12 +202,10 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <img
-              src="/generated-icon.png"
-              alt="TimeSync"
-              className="h-8 w-8 object-contain"
-            />
-            <span className="text-xl font-semibold">TimeSync</span>
+            <div className="h-8 w-8 bg-primary text-white flex items-center justify-center rounded-sm">
+              <span className="font-bold">i</span>
+            </div>
+            <span className="text-xl font-semibold">The I Research</span>
           </motion.div>
         </div>
       </header>
