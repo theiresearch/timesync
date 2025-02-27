@@ -11,15 +11,3 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
-
-@layer components {
-  /* Fix for Select triggers that shouldn't show focus rings */
-  .focus-ring-fix {
-    @apply focus:ring-0 focus:ring-offset-0 !important;
-  }
-  
-  /* Fix for button focus outlines */
-  button:focus-visible {
-    @apply outline-none;
-  }
-}
