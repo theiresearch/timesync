@@ -465,7 +465,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} TimeSync
+              © {new Date().getFullYear()} TimeSync.theiresearch.com
             </span>
             <div className="flex gap-4">
               <a

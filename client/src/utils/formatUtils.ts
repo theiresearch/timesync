@@ -15,10 +15,12 @@ const countryToFlagEmoji: Record<string, string> = {
   'Spain': '🇪🇸',
   'China': '🇨🇳',
   'Hong Kong': '🇭🇰',
+  'Taiwan': '🇹🇼',
   'Brazil': '🇧🇷',
   'Russia': '🇷🇺',
   'Mexico': '🇲🇽',
   'South Korea': '🇰🇷',
+  'North Korea': '🇰🇵',
   'Singapore': '🇸🇬',
   'New Zealand': '🇳🇿',
   'Ireland': '🇮🇪',
@@ -70,10 +72,17 @@ export const getCountryFlag = (countryOrTimezone: string): string => {
   if (countryOrTimezone === 'Europe/Amsterdam') return '🇳🇱';
   if (countryOrTimezone === 'Europe/Brussels') return '🇧🇪';
   if (countryOrTimezone === 'Europe/Budapest') return '🇭🇺';
+  if (countryOrTimezone === 'Europe/Zurich') return '🇨🇭';
+  if (countryOrTimezone === 'Europe/Oslo') return '🇳🇴';
+  if (countryOrTimezone === 'Europe/Stockholm') return '🇸🇪';
+  if (countryOrTimezone === 'Europe/Helsinki') return '🇫🇮';
+  if (countryOrTimezone === 'Europe/Moscow') return '🇷🇺';
   if (countryOrTimezone === 'Asia/Tokyo') return '🇯🇵';
   if (countryOrTimezone === 'Asia/Seoul') return '🇰🇷';
+  if (countryOrTimezone === 'Asia/Pyongyang') return '🇰🇵';
   if (countryOrTimezone === 'Asia/Shanghai') return '🇨🇳';
   if (countryOrTimezone === 'Asia/Hong_Kong') return '🇭🇰';
+  if (countryOrTimezone === 'Asia/Taipei') return '🇹🇼';
   if (countryOrTimezone === 'Asia/Singapore') return '🇸🇬';
   if (countryOrTimezone === 'Asia/Baku') return '🇦🇿';
   if (countryOrTimezone === 'Asia/Dubai') return '🇦🇪';
@@ -81,6 +90,7 @@ export const getCountryFlag = (countryOrTimezone: string): string => {
   if (countryOrTimezone === 'America/New_York') return '🇺🇸';
   if (countryOrTimezone === 'America/Los_Angeles') return '🇺🇸';
   if (countryOrTimezone === 'America/Chicago') return '🇺🇸';
+  if (countryOrTimezone === 'America/Vancouver') return '🇨🇦';
   if (countryOrTimezone === 'America/Toronto') return '🇨🇦';
   if (countryOrTimezone === 'America/Mexico_City') return '🇲🇽';
   if (countryOrTimezone === 'America/Sao_Paulo') return '🇧🇷';
@@ -95,6 +105,7 @@ const timezoneToAbbr: Record<string, string> = {
   'America/Chicago': 'CDT',
   'America/Denver': 'MDT',
   'America/Los_Angeles': 'PDT',
+  'America/Vancouver': 'PDT',
   'America/Anchorage': 'AKDT',
   'America/Phoenix': 'MST',
   'America/Honolulu': 'HST',
@@ -110,12 +121,19 @@ const timezoneToAbbr: Record<string, string> = {
   'Europe/Amsterdam': 'CEST',
   'Europe/Budapest': 'CEST',
   'Europe/Brussels': 'CEST',
+  'Europe/Zurich': 'CEST',
+  'Europe/Oslo': 'CEST',
+  'Europe/Stockholm': 'CEST',
+  'Europe/Helsinki': 'EEST',
+  'Europe/Moscow': 'MSK',
   'Asia/Baku': 'AZT',
   'Asia/Dubai': 'GST',
   'Asia/Tokyo': 'JST',
   'Asia/Shanghai': 'CST',
   'Asia/Hong_Kong': 'HKT',
+  'Asia/Taipei': 'CST',
   'Asia/Seoul': 'KST',
+  'Asia/Pyongyang': 'KST',
   'Asia/Singapore': 'SGT',
   'Australia/Melbourne': 'AEST',
   'Australia/Perth': 'AWST',
