@@ -175,8 +175,8 @@ export default function Home() {
           >
             <svg className="h-8 w-8" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
               <rect width="1000" height="1000" fill="#000"/>
-              <circle cx="700" cy="430" r="110" fill="#fff"/>
-              <path d="M700 590 L700 940 Q830 940 880 890 Q940 830 940 700 L940 590 Z" fill="#fff"/>
+              <circle cx="700" cy="400" r="110" fill="#fff"/>
+              <text x="700" y="920" fontSize="750" fontWeight="bold" fill="#fff" textAnchor="middle" dominantBaseline="middle">l</text>
             </svg>
             <span className="text-xl font-semibold">The I Research</span>
           </motion.div>
