@@ -2,9 +2,9 @@ import { format, addHours, parse, formatISO, parseISO, isWithinInterval } from '
 import { formatInTimeZone } from 'date-fns-tz';
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from '../types';
 
-const TIME_FORMAT = 'h:mm a';
+const TIME_FORMAT = 'HH:mm';
 const DATE_FORMAT = 'EEE, MMM d';
-const HOUR_FORMAT = 'h:mm a';
+const HOUR_FORMAT = 'HH:mm';
 
 export const timezones = [
   { name: 'US/Eastern (New York)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT' },

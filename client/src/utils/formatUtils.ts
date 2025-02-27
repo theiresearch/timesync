@@ -31,9 +31,48 @@ const countryToFlagEmoji: Record<string, string> = {
   'South Africa': '🇿🇦',
 };
 
-// Get country flag emoji
-export const getCountryFlag = (country: string): string => {
-  return countryToFlagEmoji[country] || '🌍';
+// Get country flag emoji from country name or timezone string
+export const getCountryFlag = (countryOrTimezone: string): string => {
+  // Check if it's a direct match in our country map
+  if (countryToFlagEmoji[countryOrTimezone]) {
+    return countryToFlagEmoji[countryOrTimezone];
+  }
+  
+  // Try to extract country from timezone string
+  const timezoneParts = countryOrTimezone.split('/');
+  const region = timezoneParts[0];
+  
+  // Map regions to countries
+  const regionToCountry: Record<string, string> = {
+    'America': '🇺🇸',
+    'Europe': '🇪🇺',
+    'Asia': '🇦🇸',
+    'Africa': '🇦🇫',
+    'Australia': '🇦🇺',
+    'Pacific': '🇳🇿',
+    'Atlantic': '🇬🇧',
+    'Indian': '🇮🇳'
+  };
+  
+  // For specific cities, override with more precise flags
+  if (countryOrTimezone === 'Europe/London') return '🇬🇧';
+  if (countryOrTimezone === 'Europe/Paris') return '🇫🇷';
+  if (countryOrTimezone === 'Europe/Berlin') return '🇩🇪';
+  if (countryOrTimezone === 'Europe/Rome') return '🇮🇹';
+  if (countryOrTimezone === 'Europe/Madrid') return '🇪🇸';
+  if (countryOrTimezone === 'Asia/Tokyo') return '🇯🇵';
+  if (countryOrTimezone === 'Asia/Seoul') return '🇰🇷';
+  if (countryOrTimezone === 'Asia/Shanghai') return '🇨🇳';
+  if (countryOrTimezone === 'Asia/Kolkata') return '🇮🇳';
+  if (countryOrTimezone === 'Asia/Singapore') return '🇸🇬';
+  if (countryOrTimezone === 'Australia/Sydney') return '🇦🇺';
+  if (countryOrTimezone === 'America/New_York') return '🇺🇸';
+  if (countryOrTimezone === 'America/Los_Angeles') return '🇺🇸';
+  if (countryOrTimezone === 'America/Chicago') return '🇺🇸';
+  if (countryOrTimezone === 'America/Toronto') return '🇨🇦';
+  if (countryOrTimezone === 'Pacific/Auckland') return '🇳🇿';
+  
+  return regionToCountry[region] || '🌍';
 };
 
 // Time zone abbreviation map

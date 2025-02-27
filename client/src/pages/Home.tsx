@@ -10,24 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 
-import { timezones, getCurrentTimeInTimezone, convertTime, formatTimeDisplay } from '@/utils/timeUtils';
+import { timezones, getCurrentTimeInTimezone, convertTime } from '@/utils/timeUtils';
 import { getCountryFlag } from '@/utils/formatUtils';
-import { PlusCircle, Clock, Calendar as CalendarIcon, Trash2, Copy, Check } from 'lucide-react';
+import { PlusCircle, Clock, Calendar as CalendarIcon, Trash2, Copy } from 'lucide-react';
 
 export default function Home() {
   // User timezone state
   const [userTimezone, setUserTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  const [userLocation, setUserLocation] = useState('My Location');
+  const [userName, setUserName] = useState('My Timezone');
   
   // Team timezones state
   const [teamTimezones, setTeamTimezones] = useState([
-    { id: 1, name: 'Team 2', location: 'London', timezone: 'Europe/London', flag: '🇬🇧' },
-    { id: 2, name: 'Team 3', location: 'New York', timezone: 'America/New_York', flag: '🇺🇸' }
+    { id: 1, name: 'UK Team', timezone: 'Europe/London', flag: '🇬🇧' },
+    { id: 2, name: 'US Team', timezone: 'America/New_York', flag: '🇺🇸' }
   ]);
   
   // New team member form state
   const [newTeamName, setNewTeamName] = useState('');
-  const [newTeamLocation, setNewTeamLocation] = useState('');
   const [newTeamTimezone, setNewTeamTimezone] = useState('');
   
   // Meeting time state
@@ -35,17 +34,19 @@ export default function Home() {
   const [meetingTime, setMeetingTime] = useState('09:00');
   const [meetingTitle, setMeetingTitle] = useState('Team Sync');
   
+  const { toast } = useToast();
+  
   // Add new team timezone
   const handleAddTeam = () => {
-    if (newTeamName && newTeamLocation && newTeamTimezone) {
-      const countryFlag = getCountryFlag(newTeamLocation);
+    if (newTeamName && newTeamTimezone) {
+      // Get flag emoji based on timezone
+      const countryFlag = getCountryFlag(newTeamTimezone);
       
       setTeamTimezones([
         ...teamTimezones,
         {
           id: Date.now(),
           name: newTeamName,
-          location: newTeamLocation,
           timezone: newTeamTimezone,
           flag: countryFlag
         }
@@ -54,19 +55,18 @@ export default function Home() {
       // Display success toast
       toast({
         title: "Team added",
-        description: `${newTeamName} from ${newTeamLocation} has been added.`,
+        description: `${newTeamName} has been added.`,
         variant: "default",
       });
       
       // Reset form
       setNewTeamName('');
-      setNewTeamLocation('');
       setNewTeamTimezone('');
     } else {
       // Display error toast if form incomplete
       toast({
         title: "Missing information",
-        description: "Please fill out all team details.",
+        description: "Please fill out team name and timezone.",
         variant: "destructive",
       });
     }
@@ -86,7 +86,7 @@ export default function Home() {
     }
   };
   
-  // Generate meeting proposal message
+  // Generate meeting proposal message in plain text format with 24h time
   const generateMeetingProposal = () => {
     if (!meetingDate || !meetingTime) return null;
     
@@ -97,21 +97,14 @@ export default function Home() {
       day: 'numeric'
     });
     
-    // Format time to be more readable
-    const hours = parseInt(meetingTime.split(':')[0]);
-    const minutes = meetingTime.split(':')[1];
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const hour12 = hours % 12 || 12;
-    const formattedTime = `${hour12}:${minutes} ${period}`;
-    
-    let proposal = `**📅 Meeting Time Proposal: ${meetingTitle}**\n\n`;
+    let proposal = `📅 Meeting Time Proposal: ${meetingTitle}\n\n`;
     
     // User's time
-    proposal += `**My Time (${userLocation}):**\n`;
-    proposal += `🕒 ${formattedTime} on ${formattedMeetingDate}\n\n`;
+    proposal += `My Time (${userName}):\n`;
+    proposal += `🕒 ${meetingTime} on ${formattedMeetingDate}\n\n`;
     
     // Team times
-    proposal += `**Team Times:**\n`;
+    proposal += `Team Times:\n`;
     
     teamTimezones.forEach(team => {
       const convertedTime = convertTime(
@@ -121,7 +114,7 @@ export default function Home() {
         team.timezone
       );
       
-      proposal += `${team.flag} **${team.name} (${team.location}):** ${convertedTime.time} on ${convertedTime.date}\n`;
+      proposal += `${team.flag} ${team.name}: ${convertedTime.time} on ${convertedTime.date}\n`;
     });
     
     return proposal;
@@ -137,7 +130,7 @@ export default function Home() {
     // Add user's timezone
     const userCurrentTime = getCurrentTimeInTimezone(userTimezone);
     timeInfo.push({
-      name: userLocation,
+      name: userName,
       timezone: userTimezone,
       flag: '🏠',
       currentTime: userCurrentTime.time,
@@ -148,7 +141,7 @@ export default function Home() {
     teamTimezones.forEach(team => {
       const teamCurrentTime = getCurrentTimeInTimezone(team.timezone);
       timeInfo.push({
-        name: `${team.name} (${team.location})`,
+        name: team.name,
         timezone: team.timezone,
         flag: team.flag,
         currentTime: teamCurrentTime.time,
@@ -158,8 +151,6 @@ export default function Home() {
     
     return timeInfo;
   };
-  
-  const { toast } = useToast();
   
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -187,40 +178,40 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-[#F5F7FA]">
       <Header />
       
-      <main className="flex-grow container mx-auto px-4 py-6">
-        <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-semibold mb-2">TimeSync</h1>
-          <p className="text-neutral-500">Coordinate meetings across time zones with ease</p>
+      <main className="flex-grow container mx-auto px-2 sm:px-4 py-4 sm:py-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-2">TimeSync</h1>
+          <p className="text-sm sm:text-base text-neutral-500">Coordinate meetings across time zones with ease</p>
         </div>
         
         <Tabs defaultValue="setup" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6">
             <TabsTrigger value="setup">Setup Time Zones</TabsTrigger>
             <TabsTrigger value="meeting">Schedule Meeting</TabsTrigger>
           </TabsList>
           
           {/* Setup Tab */}
           <TabsContent value="setup">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Your Timezone */}
               <Card>
-                <CardHeader>
-                  <CardTitle>Your Time Zone</CardTitle>
-                  <CardDescription>Set your current location and time zone</CardDescription>
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-lg">Your Time Zone</CardTitle>
+                  <CardDescription>Set your name and time zone</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="location" className="text-right">Location</Label>
+                      <Label htmlFor="name" className="text-right whitespace-nowrap">Name</Label>
                       <Input 
-                        id="location" 
+                        id="name" 
                         className="col-span-3" 
-                        value={userLocation}
-                        onChange={(e) => setUserLocation(e.target.value)}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="timezone" className="text-right">Timezone</Label>
+                      <Label htmlFor="timezone" className="text-right whitespace-nowrap">Timezone</Label>
                       <Select 
                         value={userTimezone} 
                         onValueChange={setUserTimezone}
@@ -238,7 +229,7 @@ export default function Home() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <div className="text-right">Current Time</div>
+                      <div className="text-right whitespace-nowrap">Current Time</div>
                       <div className="col-span-3 font-medium">
                         {getCurrentTimeInTimezone(userTimezone).time} {' '}
                         ({getCurrentTimeInTimezone(userTimezone).date})
@@ -250,19 +241,19 @@ export default function Home() {
               
               {/* Team Timezone List */}
               <Card>
-                <CardHeader>
-                  <CardTitle>Team Time Zones</CardTitle>
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-lg">Team Time Zones</CardTitle>
                   <CardDescription>Add time zones for your team members</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {teamTimezones.map(team => (
-                      <div key={team.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div key={team.id} className="flex items-center justify-between p-2 sm:p-3 border rounded-md">
                         <div className="flex items-center gap-2">
                           <span className="text-xl">{team.flag}</span>
                           <div>
-                            <p className="font-medium">{team.name} ({team.location})</p>
-                            <p className="text-sm text-muted-foreground">{team.timezone}</p>
+                            <p className="font-medium">{team.name}</p>
+                            <p className="text-xs sm:text-sm text-muted-foreground">{team.timezone}</p>
                           </div>
                         </div>
                         <Button 
@@ -276,18 +267,13 @@ export default function Home() {
                     ))}
                     
                     <div className="pt-4 border-t">
-                      <h3 className="font-medium mb-2">Add New Team</h3>
+                      <h3 className="font-medium mb-2 text-sm sm:text-base">Add New Team</h3>
                       <div className="grid gap-3">
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 gap-2">
                           <Input 
                             placeholder="Team Name" 
                             value={newTeamName}
                             onChange={(e) => setNewTeamName(e.target.value)}
-                          />
-                          <Input 
-                            placeholder="Location" 
-                            value={newTeamLocation}
-                            onChange={(e) => setNewTeamLocation(e.target.value)}
                           />
                           <Select 
                             value={newTeamTimezone} 
@@ -318,17 +304,17 @@ export default function Home() {
           
           {/* Meeting Tab */}
           <TabsContent value="meeting">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Schedule Meeting */}
               <Card>
-                <CardHeader>
-                  <CardTitle>Schedule Meeting</CardTitle>
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-lg">Schedule Meeting</CardTitle>
                   <CardDescription>Set a meeting time in your local timezone</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="meeting-title" className="text-right">Title</Label>
+                      <Label htmlFor="meeting-title" className="text-right whitespace-nowrap">Title</Label>
                       <Input 
                         id="meeting-title" 
                         className="col-span-3" 
@@ -337,18 +323,18 @@ export default function Home() {
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label className="text-right">Date</Label>
+                      <Label className="text-right whitespace-nowrap">Date</Label>
                       <div className="col-span-3">
                         <Calendar
                           mode="single"
                           selected={meetingDate}
                           onSelect={setMeetingDate}
-                          className="border rounded-md p-3"
+                          className="border rounded-md p-2 sm:p-3"
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="meeting-time" className="text-right">Time</Label>
+                      <Label htmlFor="meeting-time" className="text-right whitespace-nowrap">Time</Label>
                       <div className="col-span-3">
                         <Input 
                           id="meeting-time" 
@@ -364,15 +350,15 @@ export default function Home() {
               
               {/* Time Zone Comparison */}
               <Card>
-                <CardHeader>
-                  <CardTitle>Meeting Time Comparison</CardTitle>
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-lg">Meeting Time Comparison</CardTitle>
                   <CardDescription>See the meeting time across all time zones</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {timeInfo && meetingTime && meetingDate && (
                       <div className="rounded-md border">
-                        <div className="bg-muted px-4 py-2 font-medium border-b">
+                        <div className="bg-muted px-3 py-2 font-medium border-b text-sm sm:text-base">
                           {meetingTitle} - {meetingDate.toLocaleDateString()}
                         </div>
                         <div className="divide-y">
@@ -385,16 +371,16 @@ export default function Home() {
                             );
                             
                             return (
-                              <div key={idx} className="flex items-center justify-between p-3">
+                              <div key={idx} className="flex items-center justify-between p-2 sm:p-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xl">{zone.flag}</span>
-                                  <span className="font-medium">{zone.name}</span>
+                                  <span className="text-lg sm:text-xl">{zone.flag}</span>
+                                  <span className="font-medium text-sm sm:text-base">{zone.name}</span>
                                 </div>
                                 <div className="text-right">
-                                  <div className="font-medium">
+                                  <div className="font-medium text-sm sm:text-base">
                                     {convertedTime.time}
                                   </div>
-                                  <div className="text-sm text-muted-foreground">
+                                  <div className="text-xs sm:text-sm text-muted-foreground">
                                     {convertedTime.date}
                                   </div>
                                 </div>
@@ -406,12 +392,12 @@ export default function Home() {
                     )}
                     
                     {proposalText && (
-                      <Card className="mt-8">
+                      <Card className="mt-4 sm:mt-8">
                         <CardHeader className="pb-2">
                           <CardTitle className="text-base">Meeting Proposal</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="whitespace-pre-line bg-muted p-3 rounded-md text-sm mb-3">
+                          <div className="whitespace-pre-line bg-muted p-3 rounded-md text-xs sm:text-sm mb-3">
                             {proposalText}
                           </div>
                           <Button 
