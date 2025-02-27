@@ -46,6 +46,28 @@ export const getCountryFlag = (countryOrTimezone: string): string => {
     return countryToFlagEmoji[countryOrTimezone];
   }
   
+  // Handle custom city values
+  if (countryOrTimezone.startsWith('City/')) {
+    const city = countryOrTimezone.split('/')[1];
+    
+    // US cities
+    if (city === 'San_Francisco' || city === 'Los_Angeles') {
+      return '🇺🇸';
+    }
+    // Swiss cities
+    if (city === 'Geneva') {
+      return '🇨🇭';
+    }
+    // Italian cities
+    if (city === 'Monza') {
+      return '🇮🇹';
+    }
+    // Additional custom cities can be added here
+    
+    // For cities, fall back to the first part of the city name for debugging
+    return '🏙️';
+  }
+  
   // Try to extract country from timezone string
   const timezoneParts = countryOrTimezone.split('/');
   const region = timezoneParts[0];
@@ -95,6 +117,7 @@ export const getCountryFlag = (countryOrTimezone: string): string => {
   if (countryOrTimezone === 'America/Mexico_City') return '🇲🇽';
   if (countryOrTimezone === 'America/Sao_Paulo') return '🇧🇷';
   if (countryOrTimezone === 'Pacific/Auckland') return '🇳🇿';
+  if (countryOrTimezone === 'City/Miami') return '🇺🇸';
   
   return regionToCountry[region] || '🌍';
 };
@@ -138,15 +161,45 @@ const timezoneToAbbr: Record<string, string> = {
   'Australia/Melbourne': 'AEST',
   'Australia/Perth': 'AWST',
   'Pacific/Auckland': 'NZST',
+  // Custom city values
+  'City/Los_Angeles': 'PDT',
+  'City/San_Francisco': 'PDT',
+  'City/Miami': 'EDT',
+  'City/Geneva': 'CEST',
+  'City/Monza': 'CEST',
 };
 
 // Get time zone abbreviation
 export const getTimezoneAbbr = (timezone: string): string => {
-  return timezoneToAbbr[timezone] || timezone.split('/').pop() || timezone;
+  // Direct lookup in the abbreviation map
+  if (timezoneToAbbr[timezone]) {
+    return timezoneToAbbr[timezone];
+  }
+  
+  // For custom city values without explicit mapping
+  if (timezone.startsWith('City/')) {
+    const city = timezone.split('/')[1];
+    
+    // Extract from our custom city name
+    if (city.includes('_')) {
+      return city.split('_')[0].substring(0, 3).toUpperCase();
+    }
+    
+    return city.substring(0, 3).toUpperCase();
+  }
+  
+  // Default fallback to last part of timezone
+  return timezone.split('/').pop() || timezone;
 };
 
 // Get readable time zone name
 export const getReadableTimezoneName = (timezone: string): string => {
+  // Handle custom city values
+  if (timezone.startsWith('City/')) {
+    const city = timezone.split('/')[1];
+    return city.replace(/_/g, ' ');
+  }
+  
   const lastPart = timezone.split('/').pop();
   if (!lastPart) return timezone;
   
