@@ -9,12 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
-
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { timezones, getCurrentTimeInTimezone, convertTime } from '@/utils/timeUtils';
-import { getCountryFlag } from '@/utils/formatUtils';
+import { getCountryFlag, copyToClipboard } from '@/utils/formatUtils';
 import { PlusCircle, Clock, Calendar as CalendarIcon, Trash2, Copy, Settings } from 'lucide-react';
 
 export default function Home() {
@@ -165,18 +165,25 @@ export default function Home() {
   
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
-      <header className="py-4 px-6 bg-white">
-        <div className="container mx-auto flex items-center">
-          <svg className="h-8 w-8 mr-3" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-            <rect width="1000" height="1000" fill="#000"/>
-            <circle cx="700" cy="430" r="110" fill="#fff"/>
-            <path d="M700 590 L700 940 Q830 940 880 890 Q940 830 940 700 L940 590 Z" fill="#fff"/>
-          </svg>
-          <h1 className="text-xl font-semibold">TimeSync</h1>
+      <header className="fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center">
+          <motion.div
+            className="flex items-center gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <svg className="h-8 w-8" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+              <rect width="1000" height="1000" fill="#000"/>
+              <circle cx="700" cy="430" r="110" fill="#fff"/>
+              <path d="M700 590 L700 940 Q830 940 880 890 Q940 830 940 700 L940 590 Z" fill="#fff"/>
+            </svg>
+            <span className="text-xl font-semibold">The I Research</span>
+          </motion.div>
         </div>
       </header>
       
-      <main className="flex-grow container mx-auto px-4 sm:px-6 py-6 sm:py-8 bg-white">
+      <main className="flex-grow container mx-auto px-4 sm:px-6 py-6 sm:py-8 bg-white mt-16">
         <div className="mb-8">
           <p className="text-sm sm:text-base text-neutral-500">Coordinate meetings across global time zones</p>
         </div>
@@ -383,15 +390,37 @@ export default function Home() {
 
       </main>
       
-      <footer className="py-4 px-6 text-sm text-gray-500 mt-8">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <div className="mb-2 sm:mb-0">
-            © {new Date().getFullYear()} The I Research, Inc. All rights reserved.
-          </div>
-          <div className="flex space-x-6">
-            <a href="https://theiresearch.com/privacy" className="hover:text-primary hover:underline">Privacy Policy</a>
-            <a href="https://theiresearch.com/terms" className="hover:text-primary hover:underline">Terms of Service</a>
-          </div>
+      {/* Footer - Center Aligned */}
+      <footer className="bg-background/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <motion.div
+            className="flex items-center justify-between"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} The I Research
+            </span>
+            <div className="flex gap-4">
+              <a
+                href="https://x.com/theiresearch"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <FontAwesomeIcon icon={faXTwitter} className="h-4 w-4" />
+              </a>
+              <a
+                href="https://github.com/theiresearch"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <FontAwesomeIcon icon={faGithub} className="h-4 w-4" />
+              </a>
+            </div>
+          </motion.div>
         </div>
       </footer>
     </div>
