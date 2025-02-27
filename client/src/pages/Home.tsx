@@ -15,7 +15,7 @@ import Footer from '../components/Footer';
 
 import { timezones, getCurrentTimeInTimezone, convertTime } from '@/utils/timeUtils';
 import { getCountryFlag } from '@/utils/formatUtils';
-import { PlusCircle, Clock, Calendar as CalendarIcon, Trash2, Copy } from 'lucide-react';
+import { PlusCircle, Clock, Calendar as CalendarIcon, Trash2, Copy, Settings } from 'lucide-react';
 
 export default function Home() {
   // User timezone state
@@ -91,13 +91,8 @@ export default function Home() {
     if (!meetingDate || !meetingTime) return;
     
     const formattedDate = meetingDate.toISOString().split('T')[0];
-    const formattedMeetingDate = meetingDate.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long', 
-      day: 'numeric'
-    });
     
-    let proposal = `📅 Meeting Proposal for ${formattedMeetingDate}\n\n`;
+    let proposal = `📅 Meeting Proposal\n\n`;
     
     // Meeting link if provided
     if (meetingLink) {
@@ -107,11 +102,12 @@ export default function Home() {
     // Reference time (user's timezone)
     const tzInfo = timezones.find(tz => tz.value === userTimezone);
     const tzDisplay = tzInfo ? tzInfo.name : userTimezone;
-    proposal += `Your time (${tzDisplay}):\n🕒 ${meetingTime}\n\n`;
+    const refFlag = getCountryFlag(userTimezone);
+    const myTime = formattedDate + ' ' + meetingTime;
+    
+    proposal += `${refFlag} ${tzDisplay}: ${myTime}\n\n`;
     
     // Other timezones
-    proposal += `Other time zones:\n`;
-    
     timeZones.forEach(zone => {
       const convertedTime = convertTime(
         meetingTime,
@@ -122,8 +118,9 @@ export default function Home() {
       
       const tzInfo = timezones.find(tz => tz.value === zone.timezone);
       const tzDisplay = tzInfo ? tzInfo.name : zone.timezone;
+      const timeStr = formattedDate + ' ' + convertedTime.time;
       
-      proposal += `${zone.flag} ${tzDisplay}: ${convertedTime.time}\n`;
+      proposal += `${zone.flag} ${tzDisplay}: ${timeStr}\n`;
     });
     
     setGeneratedText(proposal);
@@ -187,14 +184,27 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="timezone" className="text-right whitespace-nowrap">Time Zone</Label>
+                <div className="flex justify-between items-center border rounded-md p-2 sm:p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{getCountryFlag(userTimezone)}</span>
+                    <div>
+                      <div className="font-medium">
+                        {timezones.find(tz => tz.value === userTimezone)?.name || userTimezone}
+                      </div>
+                      {meetingDate && meetingTime && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {meetingDate.toISOString().split('T')[0]} {meetingTime}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <Select 
                     value={userTimezone} 
                     onValueChange={setUserTimezone}
                   >
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select timezone" />
+                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted">
+                      <Settings className="h-4 w-4" />
+                      <span className="sr-only">Change timezone</span>
                     </SelectTrigger>
                     <SelectContent>
                       {timezones.map((tz) => (
@@ -278,59 +288,59 @@ export default function Home() {
         </div>
         
         {/* Meeting Settings */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-6">
-          <Card>
-            <CardHeader className="pb-2 sm:pb-4">
-              <CardTitle className="text-lg">Meeting Date</CardTitle>
-              <CardDescription>Select when the meeting occurs</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Calendar
-                mode="single"
-                selected={meetingDate}
-                onSelect={setMeetingDate}
-                className="mx-auto border rounded-md"
-              />
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2 sm:pb-4">
-              <CardTitle className="text-lg">Meeting Time & Link</CardTitle>
-              <CardDescription>Set meeting details and generate a proposal</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="meeting-time" className="block mb-2">Time</Label>
-                  <Input 
-                    id="meeting-time" 
-                    type="time"
-                    value={meetingTime}
-                    onChange={(e) => setMeetingTime(e.target.value)}
-                  />
+        <Card className="mt-4 sm:mt-6">
+          <CardHeader className="pb-2 sm:pb-4">
+            <CardTitle className="text-lg">Meeting Details</CardTitle>
+            <CardDescription>Set when your meeting occurs</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="meeting-date" className="block mb-2">Date</Label>
+                      <Input 
+                        id="meeting-date" 
+                        type="date"
+                        value={meetingDate ? meetingDate.toISOString().split('T')[0] : ''}
+                        onChange={(e) => setMeetingDate(e.target.value ? new Date(e.target.value) : undefined)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="meeting-time" className="block mb-2">Time</Label>
+                      <Input 
+                        id="meeting-time" 
+                        type="time"
+                        value={meetingTime}
+                        onChange={(e) => setMeetingTime(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="meeting-link" className="block mb-2">Meeting Link (optional)</Label>
+                    <Input 
+                      id="meeting-link" 
+                      placeholder="Zoom, Google Meet, etc."
+                      value={meetingLink}
+                      onChange={(e) => setMeetingLink(e.target.value)}
+                    />
+                  </div>
+                  
+                  <Button className="w-full" onClick={handleGenerateTimes}>
+                    Generate Proposal
+                  </Button>
                 </div>
-                
-                <div>
-                  <Label htmlFor="meeting-link" className="block mb-2">Meeting Link (optional)</Label>
-                  <Input 
-                    id="meeting-link" 
-                    placeholder="Zoom, Google Meet, etc."
-                    value={meetingLink}
-                    onChange={(e) => setMeetingLink(e.target.value)}
-                  />
-                </div>
-                
-                <Button className="w-full" onClick={handleGenerateTimes}>
-                  Generate Proposal
-                </Button>
-                
-                {generatedText && (
-                  <div className="mt-4">
+              </div>
+            
+              <div>
+                {generatedText ? (
+                  <div>
                     <Label htmlFor="proposal" className="block mb-2">Meeting Proposal</Label>
                     <Textarea
                       id="proposal"
-                      className="h-[150px] font-mono text-sm"
+                      className="h-[200px] font-mono text-sm"
                       value={editableProposal}
                       onChange={(e) => setEditableProposal(e.target.value)}
                     />
@@ -341,11 +351,18 @@ export default function Home() {
                       <Copy className="h-4 w-4 mr-2" /> Copy Proposal
                     </Button>
                   </div>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center text-muted-foreground">
+                      <Clock className="mx-auto h-12 w-12 mb-2 opacity-20" />
+                      <p>Fill in meeting details and generate a proposal</p>
+                    </div>
+                  </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
         
 
       </main>
