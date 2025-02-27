@@ -1,10 +1,13 @@
 // Time Zone Types
+// The offset here is just a reference display value.
+// Actual timezone calculations use the IANA identifier (value) 
+// which handles DST (daylight saving time) transitions automatically
 export interface TimeZone {
-  name: string;
-  value: string;
-  offset: string;
-  abbr: string;
-  id?: string;
+  name: string;       // Display name with UTC offset
+  value: string;      // IANA timezone identifier (e.g., "Europe/London")
+  offset: string;     // UTC offset for display (may change with DST)
+  abbr: string;       // Abbreviation (e.g., "GMT", "BST", "EDT")
+  id?: string;        // Unique identifier to prevent React key conflicts
 }
 
 // Team Member Types

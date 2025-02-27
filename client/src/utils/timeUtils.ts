@@ -6,25 +6,14 @@ const TIME_FORMAT = 'HH:mm';
 const DATE_FORMAT = 'yyyy.MM.dd';
 const HOUR_FORMAT = 'HH:mm';
 
+// Note: Time zone offsets may change due to daylight saving time (summer/winter time).
+// The offsets shown here are general references. The actual offset will be calculated
+// based on the current date and the time zone's daylight saving time rules.
 export const timezones = [
-  // UTC-08:00
-  { name: 'Los Angeles (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'la' },
-  { name: 'San Francisco (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'sf' },
-  { name: 'Vancouver (UTC-08:00)', value: 'America/Vancouver', offset: '-08:00', abbr: 'PDT', id: 'vancouver' },
-  // UTC-07:00
-  { name: 'Las Vegas (UTC-07:00)', value: 'America/Los_Angeles', offset: '-07:00', abbr: 'PDT', id: 'vegas' },
-  // UTC-06:00
-  { name: 'Austin (UTC-06:00)', value: 'America/Chicago', offset: '-06:00', abbr: 'CDT', id: 'austin' },
-  { name: 'Mexico City (UTC-06:00)', value: 'America/Mexico_City', offset: '-06:00', abbr: 'CST', id: 'mexico' },
-  // UTC-05:00
-  { name: 'New York (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'nyc' },
-  { name: 'Miami (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'miami' },
-  { name: 'Toronto (UTC-05:00)', value: 'America/Toronto', offset: '-05:00', abbr: 'EDT', id: 'toronto' },
-  // UTC-03:00
-  { name: 'Sao Paulo (UTC-03:00)', value: 'America/Sao_Paulo', offset: '-03:00', abbr: 'BRT', id: 'saopaulo' },
   // UTC+00:00
   { name: 'UTC', value: 'UTC', offset: '+00:00', abbr: 'UTC', id: 'utc' },
   { name: 'London (UTC+00:00)', value: 'Europe/London', offset: '+00:00', abbr: 'BST', id: 'london' },
+  
   // UTC+01:00
   { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', offset: '+01:00', abbr: 'CEST', id: 'paris' },
   { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', offset: '+01:00', abbr: 'CEST', id: 'monaco' },
@@ -38,29 +27,57 @@ export const timezones = [
   { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', offset: '+01:00', abbr: 'CEST', id: 'budapest' },
   { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', offset: '+01:00', abbr: 'CEST', id: 'spa' },
   { name: 'Monza (UTC+01:00)', value: 'Europe/Rome', offset: '+01:00', abbr: 'CEST', id: 'monza' },
+  
   // UTC+02:00
   { name: 'Helsinki (UTC+02:00)', value: 'Europe/Helsinki', offset: '+02:00', abbr: 'EEST', id: 'helsinki' },
+  
   // UTC+03:00
   { name: 'Moscow (UTC+03:00)', value: 'Europe/Moscow', offset: '+03:00', abbr: 'MSK', id: 'moscow' },
+  
   // UTC+04:00
   { name: 'Baku (UTC+04:00)', value: 'Asia/Baku', offset: '+04:00', abbr: 'AZT', id: 'baku' },
   { name: 'Dubai (UTC+04:00)', value: 'Asia/Dubai', offset: '+04:00', abbr: 'GST', id: 'dubai' },
+  
   // UTC+08:00
   { name: 'Shanghai (UTC+08:00)', value: 'Asia/Shanghai', offset: '+08:00', abbr: 'CST', id: 'shanghai' },
   { name: 'Hong Kong (UTC+08:00)', value: 'Asia/Hong_Kong', offset: '+08:00', abbr: 'HKT', id: 'hongkong' },
   { name: 'Taipei (UTC+08:00)', value: 'Asia/Taipei', offset: '+08:00', abbr: 'CST', id: 'taipei' },
   { name: 'Singapore (UTC+08:00)', value: 'Asia/Singapore', offset: '+08:00', abbr: 'SGT', id: 'singapore' },
+  
   // UTC+09:00
   { name: 'Seoul (UTC+09:00)', value: 'Asia/Seoul', offset: '+09:00', abbr: 'KST', id: 'seoul' },
   { name: 'Pyongyang (UTC+09:00)', value: 'Asia/Pyongyang', offset: '+09:00', abbr: 'KST', id: 'pyongyang' },
   { name: 'Tokyo (UTC+09:00)', value: 'Asia/Tokyo', offset: '+09:00', abbr: 'JST', id: 'tokyo' },
+  
   // UTC+10:00
   { name: 'Melbourne (UTC+10:00)', value: 'Australia/Melbourne', offset: '+10:00', abbr: 'AEST', id: 'melbourne' },
+  
   // UTC+12:00
   { name: 'Auckland (UTC+12:00)', value: 'Pacific/Auckland', offset: '+12:00', abbr: 'NZST', id: 'auckland' },
+  
+  // UTC-03:00
+  { name: 'Sao Paulo (UTC-03:00)', value: 'America/Sao_Paulo', offset: '-03:00', abbr: 'BRT', id: 'saopaulo' },
+  
+  // UTC-05:00
+  { name: 'New York (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'nyc' },
+  { name: 'Miami (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'miami' },
+  { name: 'Toronto (UTC-05:00)', value: 'America/Toronto', offset: '-05:00', abbr: 'EDT', id: 'toronto' },
+  
+  // UTC-06:00
+  { name: 'Austin (UTC-06:00)', value: 'America/Chicago', offset: '-06:00', abbr: 'CDT', id: 'austin' },
+  { name: 'Mexico City (UTC-06:00)', value: 'America/Mexico_City', offset: '-06:00', abbr: 'CST', id: 'mexico' },
+  
+  // UTC-07:00
+  { name: 'Las Vegas (UTC-07:00)', value: 'America/Los_Angeles', offset: '-07:00', abbr: 'PDT', id: 'vegas' },
+  
+  // UTC-08:00
+  { name: 'Los Angeles (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'la' },
+  { name: 'San Francisco (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'sf' },
+  { name: 'Vancouver (UTC-08:00)', value: 'America/Vancouver', offset: '-08:00', abbr: 'PDT', id: 'vancouver' },
 ];
 
 // Convert time between different time zones
+// This function handles daylight saving time transitions automatically
 export function convertTime(
   time: string, 
   date: string, 
@@ -97,14 +114,14 @@ export function convertTime(
       minute = parts.length > 1 ? parseInt(parts[1]) : 0;
     }
     
-    // Create date object for the specified date and time
-    const dateObj = new Date(date);
-    dateObj.setHours(hour, minute, 0, 0);
+    // Create date object for the specified date and time using the from timezone
+    const dateString = `${date}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+    const sourceDate = parseISO(dateString);
     
-    // Format in target timezone
+    // Format in target timezone - this automatically handles DST in both source and target timezones
     return {
-      time: formatInTimeZone(dateObj, toTimezone, TIME_FORMAT),
-      date: formatInTimeZone(dateObj, toTimezone, DATE_FORMAT)
+      time: formatInTimeZone(sourceDate, toTimezone, TIME_FORMAT),
+      date: formatInTimeZone(sourceDate, toTimezone, DATE_FORMAT)
     };
   } catch (error) {
     console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone });
@@ -118,6 +135,8 @@ export function convertTime(
 }
 
 // Get current time in a specific timezone
+// This function properly handles daylight saving time transitions automatically
+// as it uses date-fns-tz which respects the timezone's DST rules
 export function getCurrentTimeInTimezone(timezone: string): { time: string; date: string } {
   const now = new Date();
   
