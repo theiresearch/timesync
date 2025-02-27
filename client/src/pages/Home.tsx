@@ -29,9 +29,8 @@ import {
   timezones,
   getCurrentTimeInTimezone,
   convertTime,
-  convertIANAToCity,
 } from "@/utils/timeUtils";
-import { copyToClipboard } from "@/utils/formatUtils";
+import { getCountryFlag, copyToClipboard } from "@/utils/formatUtils";
 import {
   PlusCircle,
   Clock,
@@ -43,27 +42,14 @@ import {
 
 export default function Home() {
   // User timezone state
-  const [userTimezone, setUserTimezone] = useState(() => {
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return convertIANAToCity(browserTimezone);
-  });
+  const [userTimezone, setUserTimezone] = useState(
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+  );
 
   // Additional time zones state
   const [timeZones, setTimeZones] = useState([
-    {
-      id: 1,
-      timezone: "city/London",
-      flag: "🇬🇧",
-      displayName: "London",
-      offset: "+00:00",
-    },
-    {
-      id: 2,
-      timezone: "city/New_York",
-      flag: "🇺🇸",
-      displayName: "New York",
-      offset: "-05:00",
-    },
+    { id: 1, timezone: "Europe/London", flag: "🇬🇧" },
+    { id: 2, timezone: "America/New_York", flag: "🇺🇸" },
   ]);
 
   // New time zone form state
@@ -83,32 +69,22 @@ export default function Home() {
   // Add new timezone
   const handleAddTimeZone = () => {
     if (newTimeZone) {
-      // Find the timezone info
-      const timezoneInfo = timezones.find((tz) => tz.value === newTimeZone);
-      if (!timezoneInfo) {
-        toast({
-          title: "Error",
-          description: "Selected timezone not found.",
-          variant: "destructive",
-        });
-        return;
-      }
+      // Get flag emoji based on timezone
+      const countryFlag = getCountryFlag(newTimeZone);
 
       setTimeZones([
         ...timeZones,
         {
           id: Date.now(),
           timezone: newTimeZone,
-          flag: timezoneInfo.flag,
-          displayName: timezoneInfo.name,
-          offset: timezoneInfo.offset,
+          flag: countryFlag,
         },
       ]);
 
       // Display success toast
       toast({
         title: "Time zone added",
-        description: `${timezoneInfo.name} has been added to your timezones.`,
+        description: `New time zone has been added.`,
         variant: "default",
       });
 
@@ -154,13 +130,9 @@ export default function Home() {
     // Reference time (user's timezone)
     const tzInfo = timezones.find((tz) => tz.value === userTimezone);
     const tzDisplay = tzInfo ? tzInfo.name : userTimezone;
-    const tzOffset = tzInfo ? `UTC${tzInfo.offset}` : "UTC";
-    const refFlag = (() => {
-      const tz = timezones.find((t) => t.value === userTimezone);
-      return tz ? tz.flag : "🌐";
-    })();
+    const refFlag = getCountryFlag(userTimezone);
 
-    proposal += `${refFlag} ${tzDisplay} (${tzOffset}): ${formattedDate} ${meetingTime}\n\n`;
+    proposal += `${refFlag} ${tzDisplay}: ${formattedDate} ${meetingTime}\n\n`;
 
     // Other timezones
     timeZones.forEach((zone) => {
@@ -171,7 +143,10 @@ export default function Home() {
         zone.timezone,
       );
 
-      proposal += `${zone.flag} ${zone.displayName} (UTC${zone.offset}): ${convertedTime.date} ${convertedTime.time} (UTC${convertedTime.utcOffset})\n`;
+      const tzInfo = timezones.find((tz) => tz.value === zone.timezone);
+      const tzDisplay = tzInfo ? tzInfo.name : zone.timezone;
+
+      proposal += `${zone.flag} ${tzDisplay}: ${convertedTime.date} ${convertedTime.time}\n`;
     });
 
     setGeneratedText(proposal);
@@ -228,7 +203,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <img
-              src="/favicon.svg"
+              src="/logo.png"
               alt="The I Research Logo"
               className="w-8 h-8 object-cover rounded"
             />
@@ -256,51 +231,33 @@ export default function Home() {
                 <div className="flex justify-between items-center border rounded-md p-2 sm:p-3">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">
-                      {(() => {
-                        const tz = timezones.find(
-                          (t) => t.value === userTimezone,
-                        );
-                        return tz ? tz.flag : "🌐";
-                      })()}
+                      {getCountryFlag(userTimezone)}
                     </span>
                     <div>
                       <div className="font-medium">
-                        {(() => {
-                          const tz = timezones.find(
-                            (t) => t.value === userTimezone,
-                          );
-                          return tz ? tz.name : "UTC";
-                        })()}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {(() => {
-                          const tz = timezones.find(
-                            (t) => t.value === userTimezone,
-                          );
-                          return tz ? `UTC${tz.offset}` : "UTC+00:00";
-                        })()}
+                        {timezones.find((tz) => tz.value === userTimezone)
+                          ?.name || userTimezone}
                       </div>
                       {meetingDate && meetingTime && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground mt-1">
                           {meetingDate
-                            .toLocaleDateString()
-                            .replace(/\//g, ".")} {meetingTime}
+                            .toISOString()
+                            .split("T")[0]
+                            .replace(/-/g, ".")}{" "}
+                          {meetingTime}
                         </div>
                       )}
                     </div>
                   </div>
-                  <Select
-                    value={userTimezone}
-                    onValueChange={(value) => setUserTimezone(value)}
-                  >
-                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted focus:ring-0 focus:ring-offset-0">
+                  <Select value={userTimezone} onValueChange={setUserTimezone}>
+                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted">
                       <Settings className="h-4 w-4" />
                       <span className="sr-only">Change timezone</span>
                     </SelectTrigger>
-                    <SelectContent className="max-h-[300px] overflow-y-auto">
+                    <SelectContent>
                       {timezones.map((tz) => (
                         <SelectItem key={tz.id || tz.value} value={tz.value}>
-                          {tz.flag} {tz.name} (UTC{tz.offset})
+                          {getCountryFlag(tz.value)} {tz.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -319,6 +276,11 @@ export default function Home() {
             <CardContent>
               <div className="space-y-4">
                 {timeZones.map((zone) => {
+                  const tzInfo = timezones.find(
+                    (tz) => tz.value === zone.timezone,
+                  );
+                  const displayName = tzInfo ? tzInfo.name : zone.timezone;
+
                   // Show converted time if meeting date and time are selected
                   const convertedTime =
                     meetingDate && meetingTime
@@ -333,10 +295,7 @@ export default function Home() {
                       <div className="flex items-center gap-2">
                         <span className="text-xl">{zone.flag}</span>
                         <div>
-                          <div className="font-medium">{zone.displayName}</div>
-                          <div className="text-xs text-muted-foreground">
-                            UTC{zone.offset}
-                          </div>
+                          <div className="font-medium">{displayName}</div>
                           {convertedTime && (
                             <div className="text-xs text-muted-foreground mt-1">
                               {convertedTime.date.replace(/-/g, ".")}{" "}
@@ -361,21 +320,14 @@ export default function Home() {
                     Add New Time Zone
                   </h3>
                   <div className="flex gap-2">
-                    <Select
-                      value={newTimeZone}
-                      onValueChange={(value) => setNewTimeZone(value)}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a timezone" />
+                    <Select value={newTimeZone} onValueChange={setNewTimeZone}>
+                      <SelectTrigger className="flex-1">
+                        <SelectValue placeholder="Select time zone" />
                       </SelectTrigger>
                       <SelectContent>
-                        {timezones.map((timezone) => (
-                          <SelectItem
-                            key={timezone.value}
-                            value={timezone.value}
-                          >
-                            {timezone.flag} {timezone.name} (UTC
-                            {timezone.offset})
+                        {timezones.map((tz) => (
+                          <SelectItem key={tz.id || tz.value} value={tz.value}>
+                            {getCountryFlag(tz.value)} {tz.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -513,7 +465,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-xs text-muted-foreground">
-              {new Date().getFullYear()} The I Research
+              © {new Date().getFullYear()} The I Research
             </span>
             <div className="flex gap-4 items-center">
               <a
@@ -532,18 +484,14 @@ export default function Home() {
               >
                 <FontAwesomeIcon icon={faGithub} className="h-4 w-4" />
               </a>
-              <a
+              <a 
                 href="https://theiresearch.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
               >
-                <div className="h-4 w-4 rounded-[2px] overflow-hidden flex items-center justify-center">
-                  <img
-                    src="/favicon.svg"
-                    alt="The I Research"
-                    className="h-4 w-4 object-cover"
-                  />
+                <div className="h-4 w-4 rounded-[1px] overflow-hidden flex items-center justify-center">
+                  <img src="/logo.png" alt="The I Research" className="h-4 w-4 object-cover" />
                 </div>
               </a>
             </div>
