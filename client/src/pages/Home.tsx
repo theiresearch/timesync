@@ -33,6 +33,7 @@ export default function Home() {
   const [meetingDate, setMeetingDate] = useState<Date | undefined>(new Date());
   const [meetingTime, setMeetingTime] = useState('09:00');
   const [meetingTitle, setMeetingTitle] = useState('Team Sync');
+  const [meetingLink, setMeetingLink] = useState('');
   
   const { toast } = useToast();
   
@@ -98,6 +99,11 @@ export default function Home() {
     });
     
     let proposal = `📅 Meeting Time Proposal: ${meetingTitle}\n\n`;
+    
+    // Meeting link if provided
+    if (meetingLink) {
+      proposal += `🔗 Meeting Link: ${meetingLink}\n\n`;
+    }
     
     // User's time
     proposal += `My Time (${userName}):\n`;
@@ -214,18 +220,11 @@ export default function Home() {
                     <SelectContent>
                       {timezones.map((tz) => (
                         <SelectItem key={tz.value} value={tz.value}>
-                          {tz.name} ({tz.offset})
+                          {getCountryFlag(tz.value)} {tz.name} ({tz.offset})
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <div className="text-right whitespace-nowrap">Current Time</div>
-                  <div className="col-span-3 font-medium">
-                    {getCurrentTimeInTimezone(userTimezone).time} {' '}
-                    ({getCurrentTimeInTimezone(userTimezone).date})
-                  </div>
                 </div>
               </div>
             </CardContent>
@@ -267,6 +266,17 @@ export default function Home() {
                       type="time"
                       value={meetingTime}
                       onChange={(e) => setMeetingTime(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="meeting-link" className="text-right whitespace-nowrap">Meeting Link</Label>
+                  <div className="col-span-3">
+                    <Input 
+                      id="meeting-link" 
+                      placeholder="Zoom, Google Meet, FaceTime, etc."
+                      value={meetingLink}
+                      onChange={(e) => setMeetingLink(e.target.value)}
                     />
                   </div>
                 </div>
@@ -320,7 +330,7 @@ export default function Home() {
                         <SelectContent>
                           {timezones.map((tz) => (
                             <SelectItem key={tz.value} value={tz.value}>
-                              {tz.name}
+                              {getCountryFlag(tz.value)} {tz.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
