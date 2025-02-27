@@ -11,80 +11,141 @@ const HOUR_FORMAT = 'HH:mm';
 // based on the current date and the time zone's daylight saving time rules.
 export const timezones = [
   // UTC+00:00
-  { name: 'UTC', value: 'UTC', offset: '+00:00', abbr: 'UTC', id: 'utc' },
-  { name: 'London (UTC+00:00)', value: 'Europe/London', offset: '+00:00', abbr: 'BST', id: 'london' },
+  { name: 'UTC', value: 'UTC', offset: '+00:00', abbr: 'UTC', id: 'utc', flag: '🌐' },
+  { name: 'London', value: 'city/London', offset: '+00:00', abbr: 'BST', id: 'london', flag: '🇬🇧' },
   
   // UTC+01:00
-  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', offset: '+01:00', abbr: 'CEST', id: 'paris' },
-  { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', offset: '+01:00', abbr: 'CEST', id: 'monaco' },
-  { name: 'Barcelona (UTC+01:00)', value: 'Europe/Madrid', offset: '+01:00', abbr: 'CEST', id: 'barcelona' },
-  { name: 'Amsterdam (UTC+01:00)', value: 'Europe/Amsterdam', offset: '+01:00', abbr: 'CEST', id: 'amsterdam' },
-  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', offset: '+01:00', abbr: 'CEST', id: 'berlin' },
-  { name: 'Zurich (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CEST', id: 'zurich' },
-  { name: 'Geneva (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CEST', id: 'geneva' },
-  { name: 'Oslo (UTC+01:00)', value: 'Europe/Oslo', offset: '+01:00', abbr: 'CEST', id: 'oslo' },
-  { name: 'Stockholm (UTC+01:00)', value: 'Europe/Stockholm', offset: '+01:00', abbr: 'CEST', id: 'stockholm' },
-  { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', offset: '+01:00', abbr: 'CEST', id: 'budapest' },
-  { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', offset: '+01:00', abbr: 'CEST', id: 'spa' },
-  { name: 'Monza (UTC+01:00)', value: 'Europe/Rome', offset: '+01:00', abbr: 'CEST', id: 'monza' },
+  { name: 'Paris', value: 'city/Paris', offset: '+01:00', abbr: 'CEST', id: 'paris', flag: '🇫🇷' },
+  { name: 'Monaco', value: 'city/Monaco', offset: '+01:00', abbr: 'CEST', id: 'monaco', flag: '🇲🇨' },
+  { name: 'Barcelona', value: 'city/Barcelona', offset: '+01:00', abbr: 'CEST', id: 'barcelona', flag: '🇪🇸' },
+  { name: 'Amsterdam', value: 'city/Amsterdam', offset: '+01:00', abbr: 'CEST', id: 'amsterdam', flag: '🇳🇱' },
+  { name: 'Berlin', value: 'city/Berlin', offset: '+01:00', abbr: 'CEST', id: 'berlin', flag: '🇩🇪' },
+  { name: 'Zurich', value: 'city/Zurich', offset: '+01:00', abbr: 'CEST', id: 'zurich', flag: '🇨🇭' },
+  { name: 'Geneva', value: 'city/Geneva', offset: '+01:00', abbr: 'CEST', id: 'geneva', flag: '🇨🇭' },
+  { name: 'Oslo', value: 'city/Oslo', offset: '+01:00', abbr: 'CEST', id: 'oslo', flag: '🇳🇴' },
+  { name: 'Stockholm', value: 'city/Stockholm', offset: '+01:00', abbr: 'CEST', id: 'stockholm', flag: '🇸🇪' },
+  { name: 'Budapest', value: 'city/Budapest', offset: '+01:00', abbr: 'CEST', id: 'budapest', flag: '🇭🇺' },
+  { name: 'Spa', value: 'city/Spa', offset: '+01:00', abbr: 'CEST', id: 'spa', flag: '🇧🇪' },
+  { name: 'Monza', value: 'city/Monza', offset: '+01:00', abbr: 'CEST', id: 'monza', flag: '🇮🇹' },
   
   // UTC+02:00
-  { name: 'Helsinki (UTC+02:00)', value: 'Europe/Helsinki', offset: '+02:00', abbr: 'EEST', id: 'helsinki' },
+  { name: 'Helsinki', value: 'city/Helsinki', offset: '+02:00', abbr: 'EEST', id: 'helsinki', flag: '🇫🇮' },
   
   // UTC+03:00
-  { name: 'Moscow (UTC+03:00)', value: 'Europe/Moscow', offset: '+03:00', abbr: 'MSK', id: 'moscow' },
+  { name: 'Moscow', value: 'city/Moscow', offset: '+03:00', abbr: 'MSK', id: 'moscow', flag: '🇷🇺' },
   
   // UTC+04:00
-  { name: 'Baku (UTC+04:00)', value: 'Asia/Baku', offset: '+04:00', abbr: 'AZT', id: 'baku' },
-  { name: 'Dubai (UTC+04:00)', value: 'Asia/Dubai', offset: '+04:00', abbr: 'GST', id: 'dubai' },
+  { name: 'Baku', value: 'city/Baku', offset: '+04:00', abbr: 'AZT', id: 'baku', flag: '🇦🇿' },
+  { name: 'Dubai', value: 'city/Dubai', offset: '+04:00', abbr: 'GST', id: 'dubai', flag: '🇦🇪' },
   
   // UTC+08:00
-  { name: 'Shanghai (UTC+08:00)', value: 'Asia/Shanghai', offset: '+08:00', abbr: 'CST', id: 'shanghai' },
-  { name: 'Hong Kong (UTC+08:00)', value: 'Asia/Hong_Kong', offset: '+08:00', abbr: 'HKT', id: 'hongkong' },
-  { name: 'Taipei (UTC+08:00)', value: 'Asia/Taipei', offset: '+08:00', abbr: 'CST', id: 'taipei' },
-  { name: 'Singapore (UTC+08:00)', value: 'Asia/Singapore', offset: '+08:00', abbr: 'SGT', id: 'singapore' },
+  { name: 'Shanghai', value: 'city/Shanghai', offset: '+08:00', abbr: 'CST', id: 'shanghai', flag: '🇨🇳' },
+  { name: 'Hong Kong', value: 'city/Hong_Kong', offset: '+08:00', abbr: 'HKT', id: 'hongkong', flag: '🇭🇰' },
+  { name: 'Taipei', value: 'city/Taipei', offset: '+08:00', abbr: 'CST', id: 'taipei', flag: '🇹🇼' },
+  { name: 'Singapore', value: 'city/Singapore', offset: '+08:00', abbr: 'SGT', id: 'singapore', flag: '🇸🇬' },
   
   // UTC+09:00
-  { name: 'Seoul (UTC+09:00)', value: 'Asia/Seoul', offset: '+09:00', abbr: 'KST', id: 'seoul' },
-  { name: 'Pyongyang (UTC+09:00)', value: 'Asia/Pyongyang', offset: '+09:00', abbr: 'KST', id: 'pyongyang' },
-  { name: 'Tokyo (UTC+09:00)', value: 'Asia/Tokyo', offset: '+09:00', abbr: 'JST', id: 'tokyo' },
+  { name: 'Seoul', value: 'city/Seoul', offset: '+09:00', abbr: 'KST', id: 'seoul', flag: '🇰🇷' },
+  { name: 'Pyongyang', value: 'city/Pyongyang', offset: '+09:00', abbr: 'KST', id: 'pyongyang', flag: '🇰🇵' },
+  { name: 'Tokyo', value: 'city/Tokyo', offset: '+09:00', abbr: 'JST', id: 'tokyo', flag: '🇯🇵' },
   
   // UTC+10:00
-  { name: 'Melbourne (UTC+10:00)', value: 'Australia/Melbourne', offset: '+10:00', abbr: 'AEST', id: 'melbourne' },
+  { name: 'Melbourne', value: 'city/Melbourne', offset: '+10:00', abbr: 'AEST', id: 'melbourne', flag: '🇦🇺' },
   
   // UTC+12:00
-  { name: 'Auckland (UTC+12:00)', value: 'Pacific/Auckland', offset: '+12:00', abbr: 'NZST', id: 'auckland' },
+  { name: 'Auckland', value: 'city/Auckland', offset: '+12:00', abbr: 'NZST', id: 'auckland', flag: '🇳🇿' },
   
   // UTC-03:00
-  { name: 'Sao Paulo (UTC-03:00)', value: 'America/Sao_Paulo', offset: '-03:00', abbr: 'BRT', id: 'saopaulo' },
+  { name: 'Sao Paulo', value: 'city/Sao_Paulo', offset: '-03:00', abbr: 'BRT', id: 'saopaulo', flag: '🇧🇷' },
   
   // UTC-05:00
-  { name: 'New York (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'nyc' },
-  { name: 'Miami (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EDT', id: 'miami' },
-  { name: 'Toronto (UTC-05:00)', value: 'America/Toronto', offset: '-05:00', abbr: 'EDT', id: 'toronto' },
+  { name: 'New York', value: 'city/New_York', offset: '-05:00', abbr: 'EDT', id: 'nyc', flag: '🇺🇸' },
+  { name: 'Miami', value: 'city/Miami', offset: '-05:00', abbr: 'EDT', id: 'miami', flag: '🇺🇸' },
+  { name: 'Toronto', value: 'city/Toronto', offset: '-05:00', abbr: 'EDT', id: 'toronto', flag: '🇨🇦' },
   
   // UTC-06:00
-  { name: 'Austin (UTC-06:00)', value: 'America/Chicago', offset: '-06:00', abbr: 'CDT', id: 'austin' },
-  { name: 'Mexico City (UTC-06:00)', value: 'America/Mexico_City', offset: '-06:00', abbr: 'CST', id: 'mexico' },
+  { name: 'Austin', value: 'city/Austin', offset: '-06:00', abbr: 'CDT', id: 'austin', flag: '🇺🇸' },
+  { name: 'Mexico City', value: 'city/Mexico_City', offset: '-06:00', abbr: 'CST', id: 'mexico', flag: '🇲🇽' },
   
   // UTC-07:00
-  { name: 'Las Vegas (UTC-07:00)', value: 'America/Los_Angeles', offset: '-07:00', abbr: 'PDT', id: 'vegas' },
+  { name: 'Las Vegas', value: 'city/Las_Vegas', offset: '-07:00', abbr: 'MST', id: 'vegas', flag: '🇺🇸' },
   
   // UTC-08:00
-  { name: 'Los Angeles (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'la' },
-  { name: 'San Francisco (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'sf' },
-  { name: 'Vancouver (UTC-08:00)', value: 'America/Vancouver', offset: '-08:00', abbr: 'PDT', id: 'vancouver' },
+  { name: 'Los Angeles', value: 'city/Los_Angeles', offset: '-08:00', abbr: 'PDT', id: 'la', flag: '🇺🇸' },
+  { name: 'San Francisco', value: 'city/San_Francisco', offset: '-08:00', abbr: 'PDT', id: 'sf', flag: '🇺🇸' },
+  { name: 'Vancouver', value: 'city/Vancouver', offset: '-08:00', abbr: 'PDT', id: 'vancouver', flag: '🇨🇦' },
 ];
 
+// Helper function to convert IANA timezone to our city format
+export function convertIANAToCity(ianaTimezone: string): string {
+  // Extract the city name from IANA timezone (e.g., "Asia/Shanghai" -> "Shanghai")
+  const cityName = ianaTimezone.split('/').pop()?.replace('_', ' ');
+  if (!cityName) return 'UTC';
+
+  // Find the matching city timezone in our list
+  const cityTimezone = timezones.find(tz => 
+    tz.name.toLowerCase() === cityName.toLowerCase()
+  );
+
+  return cityTimezone ? cityTimezone.value : 'UTC';
+}
+
+// Map city timezones to IANA timezones
+const cityToIANAMap: { [key: string]: string } = {
+  'city/London': 'Europe/London',
+  'city/Paris': 'Europe/Paris',
+  'city/Monaco': 'Europe/Monaco',
+  'city/Barcelona': 'Europe/Madrid',
+  'city/Amsterdam': 'Europe/Amsterdam',
+  'city/Berlin': 'Europe/Berlin',
+  'city/Zurich': 'Europe/Zurich',
+  'city/Geneva': 'Europe/Zurich',
+  'city/Oslo': 'Europe/Oslo',
+  'city/Stockholm': 'Europe/Stockholm',
+  'city/Budapest': 'Europe/Budapest',
+  'city/Spa': 'Europe/Brussels',
+  'city/Monza': 'Europe/Rome',
+  'city/Helsinki': 'Europe/Helsinki',
+  'city/Moscow': 'Europe/Moscow',
+  'city/Baku': 'Asia/Baku',
+  'city/Dubai': 'Asia/Dubai',
+  'city/Shanghai': 'Asia/Shanghai',
+  'city/Hong_Kong': 'Asia/Hong_Kong',
+  'city/Taipei': 'Asia/Taipei',
+  'city/Singapore': 'Asia/Singapore',
+  'city/Seoul': 'Asia/Seoul',
+  'city/Pyongyang': 'Asia/Pyongyang',
+  'city/Tokyo': 'Asia/Tokyo',
+  'city/Melbourne': 'Australia/Melbourne',
+  'city/Auckland': 'Pacific/Auckland',
+  'city/Sao_Paulo': 'America/Sao_Paulo',
+  'city/New_York': 'America/New_York',
+  'city/Miami': 'America/New_York',
+  'city/Toronto': 'America/Toronto',
+  'city/Austin': 'America/Chicago',
+  'city/Mexico_City': 'America/Mexico_City',
+  'city/Las_Vegas': 'America/Phoenix',
+  'city/Los_Angeles': 'America/Los_Angeles',
+  'city/San_Francisco': 'America/Los_Angeles',
+  'city/Vancouver': 'America/Vancouver',
+};
+
 // Convert time between different time zones
-// This function handles daylight saving time transitions automatically 
-// by using the IANA timezone database via date-fns-tz
 export function convertTime(
   time: string, 
   date: string, 
   fromTimezone: string, 
   toTimezone: string
 ): { time: string; date: string } {
+  // Convert city timezones to IANA timezones
+  const fromIANA = fromTimezone.startsWith('city/') ? cityToIANAMap[fromTimezone] : fromTimezone;
+  const toIANA = toTimezone.startsWith('city/') ? cityToIANAMap[toTimezone] : toTimezone;
+  
+  if (!fromIANA || !toIANA) {
+    console.error("Invalid timezone:", !fromIANA ? fromTimezone : toTimezone);
+    return { time, date };
+  }
+
   // Parse the input time and date
   try {
     let hour = 0;
@@ -122,15 +183,15 @@ export function convertTime(
     const sourceDate = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
     
     // Format in source timezone first to handle DST correctly
-    const sourceTimeStr = formatInTimeZone(sourceDate, fromTimezone, 'yyyy-MM-dd\'T\'HH:mm:ssXXX');
+    const sourceTimeStr = formatInTimeZone(sourceDate, fromIANA, 'yyyy-MM-dd\'T\'HH:mm:ssXXX');
     
     // Parse that string which now has the timezone offset correctly applied
     const sourceWithTZ = new Date(sourceTimeStr);
     
     // Format in target timezone
     return {
-      time: formatInTimeZone(sourceWithTZ, toTimezone, TIME_FORMAT),
-      date: formatInTimeZone(sourceWithTZ, toTimezone, DATE_FORMAT)
+      time: formatInTimeZone(sourceWithTZ, toIANA, TIME_FORMAT),
+      date: formatInTimeZone(sourceWithTZ, toIANA, DATE_FORMAT)
     };
   } catch (error) {
     console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone });
