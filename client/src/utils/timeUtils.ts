@@ -77,7 +77,8 @@ export const timezones = [
 ];
 
 // Convert time between different time zones
-// This function handles daylight saving time transitions automatically
+// This function handles daylight saving time transitions automatically 
+// by using the IANA timezone database via date-fns-tz
 export function convertTime(
   time: string, 
   date: string, 
@@ -114,14 +115,22 @@ export function convertTime(
       minute = parts.length > 1 ? parseInt(parts[1]) : 0;
     }
     
-    // Create date object for the specified date and time using the from timezone
-    const dateString = `${date}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
-    const sourceDate = parseISO(dateString);
+    // Parse the date
+    const [year, month, day] = date.split('-').map(num => parseInt(num));
     
-    // Format in target timezone - this automatically handles DST in both source and target timezones
+    // Create a source date in UTC (to avoid any local timezone interference)
+    const sourceDate = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
+    
+    // Format in source timezone first to handle DST correctly
+    const sourceTimeStr = formatInTimeZone(sourceDate, fromTimezone, 'yyyy-MM-dd\'T\'HH:mm:ssXXX');
+    
+    // Parse that string which now has the timezone offset correctly applied
+    const sourceWithTZ = new Date(sourceTimeStr);
+    
+    // Format in target timezone
     return {
-      time: formatInTimeZone(sourceDate, toTimezone, TIME_FORMAT),
-      date: formatInTimeZone(sourceDate, toTimezone, DATE_FORMAT)
+      time: formatInTimeZone(sourceWithTZ, toTimezone, TIME_FORMAT),
+      date: formatInTimeZone(sourceWithTZ, toTimezone, DATE_FORMAT)
     };
   } catch (error) {
     console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone });
