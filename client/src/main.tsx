@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./theme-override.css";
 
 // Handle WebSocket connection errors for HMR
 window.addEventListener('error', (event) => {
