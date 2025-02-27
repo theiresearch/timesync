@@ -27,43 +27,51 @@ export function convertTime(
   toTimezone: string
 ): { time: string; date: string } {
   // Parse the input time and date
-  // Handle 12-hour format with AM/PM if present
-  let timeFormatted = time;
-  if (time.includes('AM') || time.includes('PM')) {
-    // Extract just the hours and minutes
-    const timeParts = time.match(/(\d+):(\d+)\s?(AM|PM)?/);
-    if (timeParts) {
-      const [_, hours, minutes, period] = timeParts;
-      const hour = parseInt(hours);
-      // Convert to 24-hour format
-      if (period === 'PM' && hour !== 12) {
-        timeFormatted = `${hour + 12}:${minutes}`;
-      } else if (period === 'AM' && hour === 12) {
-        timeFormatted = `00:${minutes}`;
-      } else {
-        timeFormatted = `${hour.toString().padStart(2, '0')}:${minutes}`;
-      }
-    }
-  }
-  
-  // Construct a proper ISO date string with the time
-  const dateTimeStr = `${date}T${timeFormatted}:00`;
-  
   try {
-    // Parse the date string
-    const dateObj = parseISO(dateTimeStr);
+    let hour = 0;
+    let minute = 0;
     
-    // Format the time and date in the target timezone
+    // Handle different time formats
+    if (time.includes('AM') || time.includes('PM')) {
+      // Handle 12-hour format like "9:00 AM"
+      const matches = time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (matches) {
+        hour = parseInt(matches[1]);
+        minute = parseInt(matches[2]);
+        const period = matches[3].toUpperCase();
+        
+        // Adjust hour for PM
+        if (period === 'PM' && hour < 12) {
+          hour += 12;
+        }
+        // Adjust midnight
+        if (period === 'AM' && hour === 12) {
+          hour = 0;
+        }
+      }
+    } else {
+      // Handle 24-hour format like "9:00"
+      const parts = time.split(':');
+      hour = parseInt(parts[0]);
+      minute = parts.length > 1 ? parseInt(parts[1]) : 0;
+    }
+    
+    // Create date object for the specified date and time
+    const dateObj = new Date(date);
+    dateObj.setHours(hour, minute, 0, 0);
+    
+    // Format in target timezone
     return {
       time: formatInTimeZone(dateObj, toTimezone, TIME_FORMAT),
       date: formatInTimeZone(dateObj, toTimezone, DATE_FORMAT)
     };
   } catch (error) {
-    console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone, dateTimeStr });
+    console.error("Error converting time:", error, { time, date, fromTimezone, toTimezone });
+    
     // Return fallback values
     return {
       time: time,
-      date: formatDate(date)
+      date: date
     };
   }
 }
