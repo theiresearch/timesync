@@ -250,7 +250,7 @@ export default function Home() {
                     </div>
                   </div>
                   <Select value={userTimezone} onValueChange={setUserTimezone}>
-                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted">
+                    <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted focus:ring-0 focus:ring-offset-0">
                       <Settings className="h-4 w-4" />
                       <span className="sr-only">Change timezone</span>
                     </SelectTrigger>
