@@ -165,19 +165,19 @@ export default function Home() {
   
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
-      <header className="py-4 px-6 border-b bg-white">
+      <header className="py-4 px-6 bg-white">
         <div className="container mx-auto flex items-center">
-          <div className="h-8 w-8 rounded-sm bg-black text-white font-bold flex items-center justify-center mr-3">I</div>
+          <svg className="h-8 w-8 mr-3" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1000" height="1000" fill="#000"/>
+            <circle cx="700" cy="430" r="110" fill="#fff"/>
+            <path d="M700 590 L700 940 Q830 940 880 890 Q940 830 940 700 L940 590 Z" fill="#fff"/>
+          </svg>
           <h1 className="text-xl font-semibold">TimeSync</h1>
-          <div className="ml-auto text-sm text-gray-600">
-            A <a href="https://theiresearch.com" target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">The I Research</a> Product
-          </div>
         </div>
       </header>
       
       <main className="flex-grow container mx-auto px-4 sm:px-6 py-6 sm:py-8 bg-white">
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-semibold mb-2">TimeSync</h1>
           <p className="text-sm sm:text-base text-neutral-500">Coordinate meetings across global time zones</p>
         </div>
         
@@ -383,7 +383,7 @@ export default function Home() {
 
       </main>
       
-      <footer className="border-t py-4 px-6 text-sm text-gray-500 mt-8">
+      <footer className="py-4 px-6 text-sm text-gray-500 mt-8">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <div className="mb-2 sm:mb-0">
             © {new Date().getFullYear()} The I Research, Inc. All rights reserved.
