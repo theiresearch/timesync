@@ -193,7 +193,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950">
       <header className="fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50">
         <div className="container mx-auto px-4 h-16 flex items-center">
           <motion.div
@@ -212,7 +212,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto px-4 sm:px-6 py-6 sm:py-8 bg-white mt-16">
+      <main className="flex-grow container mx-auto px-4 sm:px-6 py-6 sm:py-8 bg-white dark:bg-gray-950 mt-16">
         <div className="mb-8">
           <p className="text-sm sm:text-base text-neutral-500">
             Coordinate meetings across global time zones
@@ -456,7 +456,7 @@ export default function Home() {
       </main>
 
       {/* Footer - Center Aligned */}
-      <footer className="bg-background/80 backdrop-blur-sm">
+      <footer className="bg-background/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <motion.div
             className="flex items-center justify-between"
