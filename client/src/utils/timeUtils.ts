@@ -92,11 +92,7 @@ export function convertTime(
     let hour = 0;
     let minute = 0;
     
-    // Find the timezone objects with standard IANA timezone identifiers
-    const fromTimezoneObj = timezones.find(tz => tz.value === fromTimezone);
-    const toTimezoneObj = timezones.find(tz => tz.value === toTimezone);
-    
-    // Use the value directly as we've standardized all timezone values to valid IANA identifiers
+    // Use IANA timezone identifiers directly
     const actualFromTimezone = fromTimezone;
     const actualToTimezone = toTimezone;
     

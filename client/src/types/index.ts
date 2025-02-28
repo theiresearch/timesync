@@ -4,8 +4,7 @@
 // which handles DST (daylight saving time) transitions automatically
 export interface TimeZone {
   name: string;       // Display name with UTC offset
-  value: string;      // City identifier (e.g., "City/San_Francisco" or "Europe/London")
-  ianaTimezone?: string; // IANA timezone identifier for time calculations (e.g., "America/Los_Angeles")
+  value: string;      // IANA timezone identifier (e.g., "America/Los_Angeles" or "Europe/London")
   offset: string;     // UTC offset for display (may change with DST)
   abbr: string;       // Abbreviation (e.g., "GMT", "BST", "EDT")
   id?: string;        // Unique identifier to prevent React key conflicts
