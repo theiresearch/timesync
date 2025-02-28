@@ -1,4 +1,5 @@
 import { TeamMemberWithLocalTime } from '../types';
+import { formatInTimeZone } from 'date-fns-tz';
 
 // Country flags emoji map
 const countryToFlagEmoji: Record<string, string> = {
@@ -190,6 +191,17 @@ export const getTimezoneAbbr = (timezone: string): string => {
   
   // Default fallback to last part of timezone
   return timezone.split('/').pop() || timezone;
+};
+
+// Get dynamic timezone abbreviation
+export const getDynamicTimezoneAbbr = (timezone: string, date: Date): string => {
+  try {
+    const formattedDate = formatInTimeZone(date, timezone, 'zzzz');
+    return formattedDate;
+  } catch (error) {
+    console.error(`Error getting dynamic timezone abbreviation for ${timezone}: ${error}`);
+    return getTimezoneAbbr(timezone);
+  }
 };
 
 // Get readable time zone name

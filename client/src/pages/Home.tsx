@@ -23,7 +23,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
-import { timezones, convertTime } from "../utils/timeUtils";
+import { timezones, convertTime, getActualUtcOffset } from "../utils/timeUtils";
 import { getCountryFlag } from "../utils/formatUtils";
 import {
   PlusCircle,
@@ -233,6 +233,9 @@ export default function Home() {
                         {timezones.find((tz) => tz.value === userTimezone)
                           ?.name || userTimezone}
                       </div>
+                      <div className="text-xs text-muted-foreground">
+                        UTC{getActualUtcOffset(userTimezone, meetingDate ? new Date(meetingDate) : undefined)}
+                      </div>
                       {meetingDate && meetingTime && (
                         <div className="text-xs text-muted-foreground mt-1">
                           {meetingDate
@@ -252,7 +255,7 @@ export default function Home() {
                     <SelectContent>
                       {timezones.map((tz) => (
                         <SelectItem key={tz.id || tz.value} value={tz.value}>
-                          {getCountryFlag(tz.value)} {tz.name}
+                          {getCountryFlag(tz.value)} {tz.name} <span className="text-xs text-muted-foreground ml-1">(UTC{getActualUtcOffset(tz.value, meetingDate ? new Date(meetingDate) : undefined)})</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -275,6 +278,7 @@ export default function Home() {
                     (tz) => tz.value === zone.timezone,
                   );
                   const displayName = tzInfo ? tzInfo.name : zone.timezone;
+                  const utcOffset = getActualUtcOffset(zone.timezone, meetingDate ? new Date(meetingDate) : undefined);
 
                   // Show converted time if meeting date and time are selected
                   const convertedTime =
@@ -291,6 +295,9 @@ export default function Home() {
                         <span className="text-xl">{zone.flag}</span>
                         <div>
                           <div className="font-medium">{displayName}</div>
+                          <div className="text-xs text-muted-foreground">
+                            UTC{utcOffset}
+                          </div>
                           {convertedTime && (
                             <div className="text-xs text-muted-foreground mt-1">
                               {convertedTime.date.replace(/-/g, ".")}{" "}
@@ -322,7 +329,7 @@ export default function Home() {
                       <SelectContent>
                         {timezones.map((tz) => (
                           <SelectItem key={tz.id || tz.value} value={tz.value}>
-                            {getCountryFlag(tz.value)} {tz.name}
+                            {getCountryFlag(tz.value)} {tz.name} <span className="text-xs text-muted-foreground ml-1">(UTC{getActualUtcOffset(tz.value, meetingDate ? new Date(meetingDate) : undefined)})</span>
                           </SelectItem>
                         ))}
                       </SelectContent>

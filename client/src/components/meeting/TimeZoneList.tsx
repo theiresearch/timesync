@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTimeZone } from '@/context/TimeZoneContext';
 import TimeZoneCard from '@/components/time/TimeZoneCard';
-import { timezones } from '@/utils/timeUtils';
+import { timezones, getActualUtcOffset } from '@/utils/timeUtils';
 import { getCountryFlag } from '@/utils/formatUtils';
 import { TeamMember } from '@/types';
 
 export default function TimeZoneList() {
-  const { teamMembers, addTeamMember, removeTeamMember, isLoading } = useTimeZone();
+  const { 
+    teamMembers, 
+    addTeamMember, 
+    removeTeamMember, 
+    isLoading, 
+    meetingDetails 
+  } = useTimeZone();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Form state
@@ -101,7 +107,7 @@ export default function TimeZoneList() {
                     <option value="">Select a timezone</option>
                     {timezones.map((tz) => (
                       <option key={tz.value} value={tz.value}>
-                        {tz.label}
+                        {tz.name} (UTC{getActualUtcOffset(tz.value, meetingDetails?.date ? new Date(meetingDetails.date) : undefined)})
                       </option>
                     ))}
                   </select>
@@ -175,6 +181,7 @@ export default function TimeZoneList() {
               key={member.id}
               member={member}
               onRemove={() => removeTeamMember(member.id)}
+              meetingDate={meetingDetails?.date ? new Date(meetingDetails.date) : undefined}
             />
           ))
         )}

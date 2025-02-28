@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTimeZone } from '@/context/TimeZoneContext';
-import { convertTime, formatDate } from '@/utils/timeUtils';
-import { getTimezoneAbbr, copyToClipboard } from '@/utils/formatUtils';
+import { convertTime, formatDate, getActualUtcOffset } from '@/utils/timeUtils';
+import { getTimezoneAbbr, getDynamicTimezoneAbbr, copyToClipboard } from '@/utils/formatUtils';
 import { useToast } from '@/hooks/use-toast';
 
 export default function MeetingProposal() {
@@ -85,7 +85,10 @@ export default function MeetingProposal() {
                   member.timeZone
                 );
                 
+                // Get dynamic timezone abbreviation and current UTC offset
                 const tzAbbr = getTimezoneAbbr(member.timeZone);
+                const utcOffset = getActualUtcOffset(member.timeZone, new Date(meetingDetails.date));
+                
                 const nextDayIndicator = localStartDateTime.date !== formatDate(meetingDetails.date) 
                   ? ` (${localStartDateTime.date})` 
                   : '';
@@ -93,7 +96,11 @@ export default function MeetingProposal() {
                 return (
                   <li key={member.id} className="flex">
                     <span className="mr-2">{member.flag}</span>
-                    <span><strong>{member.name} ({member.country}):</strong> {localStartDateTime.time} - {localEndDateTime.time} {tzAbbr}{nextDayIndicator}</span>
+                    <span>
+                      <strong>{member.name} ({member.country}):</strong> {localStartDateTime.time} - {localEndDateTime.time} {tzAbbr}
+                      <span className="text-xs text-neutral-500 ml-1">UTC{utcOffset}</span>
+                      {nextDayIndicator}
+                    </span>
                   </li>
                 );
               })}

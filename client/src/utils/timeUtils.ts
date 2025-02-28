@@ -5,8 +5,9 @@ import {
   formatISO,
   parseISO,
   isWithinInterval,
+  getMonth,
 } from "date-fns";
-import { formatInTimeZone, toZonedTime } from "date-fns-tz";
+import { formatInTimeZone, toZonedTime, getTimezoneOffset } from "date-fns-tz";
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from "../types";
 
 const TIME_FORMAT = "HH:mm";
@@ -20,7 +21,7 @@ export const timezones = [
   // UTC+00:00
   { name: "UTC", value: "UTC", offset: "+00:00", abbr: "UTC", id: "utc-0" },
   {
-    name: "London (UTC+00:00)",
+    name: "London",
     value: "Europe/London",
     offset: "+00:00",
     abbr: "GMT/BST",
@@ -30,7 +31,7 @@ export const timezones = [
   // UTC Positive Offsets (East of Greenwich)
   // UTC+01:00
   {
-    name: "Paris (UTC+01:00)",
+    name: "Paris",
     value: "Europe/Paris",
     ianaTimezone: "Europe/Paris",
     offset: "+01:00",
@@ -38,7 +39,7 @@ export const timezones = [
     id: "paris-1",
   },
   {
-    name: "Monaco (UTC+01:00)",
+    name: "Monaco",
     value: "Europe/Monaco",
     ianaTimezone: "Europe/Monaco",
     offset: "+01:00",
@@ -46,7 +47,7 @@ export const timezones = [
     id: "monaco-1",
   },
   {
-    name: "Barcelona (UTC+01:00)",
+    name: "Barcelona",
     value: "Europe/Madrid",
     ianaTimezone: "Europe/Madrid",
     offset: "+01:00",
@@ -54,7 +55,7 @@ export const timezones = [
     id: "barcelona-1",
   },
   {
-    name: "Amsterdam (UTC+01:00)",
+    name: "Amsterdam",
     value: "Europe/Amsterdam",
     ianaTimezone: "Europe/Amsterdam",
     offset: "+01:00",
@@ -62,7 +63,7 @@ export const timezones = [
     id: "amsterdam-1",
   },
   {
-    name: "Berlin (UTC+01:00)",
+    name: "Berlin",
     value: "Europe/Berlin",
     ianaTimezone: "Europe/Berlin",
     offset: "+01:00",
@@ -70,7 +71,7 @@ export const timezones = [
     id: "berlin-1",
   },
   {
-    name: "Zurich (UTC+01:00)",
+    name: "Zurich",
     value: "Europe/Zurich",
     ianaTimezone: "Europe/Zurich",
     offset: "+01:00",
@@ -78,7 +79,7 @@ export const timezones = [
     id: "zurich-1",
   },
   {
-    name: "Geneva (UTC+01:00)",
+    name: "Geneva",
     value: "City/Geneva",
     ianaTimezone: "Europe/Zurich",
     offset: "+01:00",
@@ -86,7 +87,7 @@ export const timezones = [
     id: "geneva-1",
   },
   {
-    name: "Oslo (UTC+01:00)",
+    name: "Oslo",
     value: "Europe/Oslo",
     ianaTimezone: "Europe/Oslo",
     offset: "+01:00",
@@ -94,7 +95,7 @@ export const timezones = [
     id: "oslo-1",
   },
   {
-    name: "Stockholm (UTC+01:00)",
+    name: "Stockholm",
     value: "Europe/Stockholm",
     ianaTimezone: "Europe/Stockholm",
     offset: "+01:00",
@@ -102,7 +103,7 @@ export const timezones = [
     id: "stockholm-1",
   },
   {
-    name: "Budapest (UTC+01:00)",
+    name: "Budapest",
     value: "Europe/Budapest",
     ianaTimezone: "Europe/Budapest",
     offset: "+01:00",
@@ -110,7 +111,7 @@ export const timezones = [
     id: "budapest-1",
   },
   {
-    name: "Spa (UTC+01:00)",
+    name: "Spa",
     value: "Europe/Brussels",
     ianaTimezone: "Europe/Brussels",
     offset: "+01:00",
@@ -118,7 +119,7 @@ export const timezones = [
     id: "spa-1",
   },
   {
-    name: "Monza (UTC+01:00)",
+    name: "Monza",
     value: "City/Monza",
     ianaTimezone: "Europe/Rome",
     offset: "+01:00",
@@ -128,7 +129,7 @@ export const timezones = [
 
   // UTC+02:00
   {
-    name: "Helsinki (UTC+02:00)",
+    name: "Helsinki",
     value: "Europe/Helsinki",
     offset: "+02:00",
     abbr: "EET/EEST",
@@ -137,7 +138,7 @@ export const timezones = [
 
   // UTC+03:00
   {
-    name: "Moscow (UTC+03:00)",
+    name: "Moscow",
     value: "Europe/Moscow",
     offset: "+03:00",
     abbr: "MSK",
@@ -146,14 +147,14 @@ export const timezones = [
 
   // UTC+04:00
   {
-    name: "Baku (UTC+04:00)",
+    name: "Baku",
     value: "Asia/Baku",
     offset: "+04:00",
     abbr: "AZT",
     id: "baku-4",
   },
   {
-    name: "Dubai (UTC+04:00)",
+    name: "Dubai",
     value: "Asia/Dubai",
     offset: "+04:00",
     abbr: "GST",
@@ -162,28 +163,28 @@ export const timezones = [
 
   // UTC+08:00
   {
-    name: "Shanghai (UTC+08:00)",
+    name: "Shanghai",
     value: "Asia/Shanghai",
     offset: "+08:00",
     abbr: "CST",
     id: "shanghai-8",
   },
   {
-    name: "Hong Kong (UTC+08:00)",
+    name: "Hong Kong",
     value: "Asia/Hong_Kong",
     offset: "+08:00",
     abbr: "HKT",
     id: "hongkong-8",
   },
   {
-    name: "Taipei (UTC+08:00)",
+    name: "Taipei",
     value: "Asia/Taipei",
     offset: "+08:00",
     abbr: "CST",
     id: "taipei-8",
   },
   {
-    name: "Singapore (UTC+08:00)",
+    name: "Singapore",
     value: "Asia/Singapore",
     offset: "+08:00",
     abbr: "SGT",
@@ -192,21 +193,21 @@ export const timezones = [
 
   // UTC+09:00
   {
-    name: "Seoul (UTC+09:00)",
+    name: "Seoul",
     value: "Asia/Seoul",
     offset: "+09:00",
     abbr: "KST",
     id: "seoul-9",
   },
   {
-    name: "Pyongyang (UTC+09:00)",
+    name: "Pyongyang",
     value: "Asia/Pyongyang",
     offset: "+09:00",
     abbr: "KST",
     id: "pyongyang-9",
   },
   {
-    name: "Tokyo (UTC+09:00)",
+    name: "Tokyo",
     value: "Asia/Tokyo",
     offset: "+09:00",
     abbr: "JST",
@@ -215,7 +216,7 @@ export const timezones = [
 
   // UTC+10:00
   {
-    name: "Melbourne (UTC+10:00)",
+    name: "Melbourne",
     value: "Australia/Melbourne",
     offset: "+10:00",
     abbr: "AEST/AEDT",
@@ -224,7 +225,7 @@ export const timezones = [
 
   // UTC+12:00
   {
-    name: "Auckland (UTC+12:00)",
+    name: "Auckland",
     value: "Pacific/Auckland",
     offset: "+12:00",
     abbr: "NZST/NZDT",
@@ -234,7 +235,7 @@ export const timezones = [
   // UTC Negative Offsets (West of Greenwich)
   // UTC-03:00
   {
-    name: "Sao Paulo (UTC-03:00)",
+    name: "Sao Paulo",
     value: "America/Sao_Paulo",
     offset: "-03:00",
     abbr: "BRT",
@@ -243,7 +244,7 @@ export const timezones = [
 
   // UTC-05:00
   {
-    name: "New York (UTC-05:00)",
+    name: "New York",
     value: "America/New_York",
     ianaTimezone: "America/New_York",
     offset: "-05:00",
@@ -251,7 +252,7 @@ export const timezones = [
     id: "nyc-n5",
   },
   {
-    name: "Miami (UTC-05:00)",
+    name: "Miami",
     value: "City/Miami",
     ianaTimezone: "America/New_York",
     offset: "-05:00",
@@ -259,7 +260,7 @@ export const timezones = [
     id: "miami-n5",
   },
   {
-    name: "Toronto (UTC-05:00)",
+    name: "Toronto",
     value: "America/Toronto",
     ianaTimezone: "America/Toronto",
     offset: "-05:00",
@@ -269,14 +270,14 @@ export const timezones = [
 
   // UTC-06:00
   {
-    name: "Austin (UTC-06:00)",
+    name: "Austin",
     value: "America/Chicago",
     offset: "-06:00",
     abbr: "CST/CDT",
     id: "austin-n6",
   },
   {
-    name: "Mexico City (UTC-06:00)",
+    name: "Mexico City",
     value: "America/Mexico_City",
     offset: "-06:00",
     abbr: "CST/CDT",
@@ -285,7 +286,7 @@ export const timezones = [
 
   // UTC-07:00
   {
-    name: "Las Vegas (UTC-07:00)",
+    name: "Las Vegas",
     value: "America/Phoenix",
     offset: "-07:00",
     abbr: "MST",
@@ -294,7 +295,7 @@ export const timezones = [
 
   // UTC-08:00
   {
-    name: "Los Angeles (UTC-08:00)",
+    name: "Los Angeles",
     value: "City/Los_Angeles",
     ianaTimezone: "America/Los_Angeles",
     offset: "-08:00",
@@ -302,7 +303,7 @@ export const timezones = [
     id: "la-n8",
   },
   {
-    name: "San Francisco (UTC-08:00)",
+    name: "San Francisco",
     value: "City/San_Francisco",
     ianaTimezone: "America/Los_Angeles",
     offset: "-08:00",
@@ -310,7 +311,7 @@ export const timezones = [
     id: "sf-n8",
   },
   {
-    name: "Vancouver (UTC-08:00)",
+    name: "Vancouver",
     value: "America/Vancouver",
     offset: "-08:00",
     abbr: "PST/PDT",
@@ -467,7 +468,7 @@ export function isWithinWorkingHours(
 // Add local time information to team members
 export function addLocalTimeToTeamMembers(
   teamMembers: TeamMember[],
-  referenceDate: string = new Date().toISOString().split("T")[0],
+  referenceDate?: string,
 ): TeamMemberWithLocalTime[] {
   return teamMembers.map((member) => {
     // Get current time in the team member's timezone
@@ -584,8 +585,45 @@ END:VCALENDAR`;
 
 // Helper function to format time for display in 12-hour format
 export function formatTimeDisplay(time: string): string {
-  const [hours, minutes] = time.split(":").map(Number);
-  const period = hours >= 12 ? "PM" : "AM";
-  const hour12 = hours % 12 || 12;
-  return `${hour12}:${minutes.toString().padStart(2, "0")} ${period}`;
+  const [hour, minute] = time.split(':').map(Number);
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour % 12 || 12;
+  return `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`;
+}
+
+// Get the actual UTC offset for a timezone, considering daylight saving time
+export function getActualUtcOffset(timezone: string, referenceDate?: Date): string {
+  try {
+    // Use provided reference date or current date
+    const dateToUse = referenceDate || new Date();
+    
+    // Find the timezone object to check if it has an ianaTimezone property
+    const timezoneObj = timezones.find((tz) => tz.value === timezone);
+    const actualTimezone = timezoneObj?.ianaTimezone || timezone;
+    
+    // Get the formatted date with timezone offset
+    const formattedDate = formatInTimeZone(dateToUse, actualTimezone, 'XXX');
+    
+    // Convert 'Z' to '+00:00' for consistency
+    return formattedDate === 'Z' ? '+00:00' : formattedDate;
+  } catch (error) {
+    console.error(`Error calculating offset for ${timezone}:`, error);
+    return "+00:00"; // Default to UTC if there's an error
+  }
+}
+
+// FOR TESTING ONLY: Get the UTC offset for a specific date
+// This function is useful to check what the offset would be on different dates
+// e.g., to see if a timezone has DST and when the changes occur
+export function getUtcOffsetForDate(timezone: string, date: Date): string {
+  try {
+    const timezoneObj = timezones.find((tz) => tz.value === timezone);
+    const actualTimezone = timezoneObj?.ianaTimezone || timezone;
+    
+    const formattedDate = formatInTimeZone(date, actualTimezone, 'XXX');
+    return formattedDate === 'Z' ? '+00:00' : formattedDate;
+  } catch (error) {
+    console.error(`Error calculating offset for ${timezone} at date ${date}:`, error);
+    return "+00:00";
+  }
 }

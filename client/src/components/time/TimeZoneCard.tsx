@@ -1,12 +1,22 @@
 import { TeamMemberWithLocalTime } from '@/types';
 import { formatWorkingHours } from '@/utils/formatUtils';
+import { getActualUtcOffset } from '@/utils/timeUtils';
+import { useTimeZone } from '@/context/TimeZoneContext';
 
 interface TimeZoneCardProps {
   member: TeamMemberWithLocalTime;
   onRemove?: (id: number) => void;
+  meetingDate?: Date;
 }
 
-export default function TimeZoneCard({ member, onRemove }: TimeZoneCardProps) {
+export default function TimeZoneCard({ member, onRemove, meetingDate }: TimeZoneCardProps) {
+  // Try to get meeting details from context if not provided as prop
+  const { meetingDetails } = useTimeZone();
+  const contextDate = meetingDetails?.date ? new Date(meetingDetails.date) : undefined;
+  
+  // Get the dynamically calculated UTC offset based on meeting date or current date
+  const utcOffset = getActualUtcOffset(member.timeZone, meetingDate || contextDate);
+  
   return (
     <div className="timezone-card bg-white border border-neutral-200 rounded-md p-4 mb-3 hover:shadow-md transition-all">
       <div className="flex justify-between items-start">
@@ -17,6 +27,9 @@ export default function TimeZoneCard({ member, onRemove }: TimeZoneCardProps) {
           </div>
           <p className="text-sm text-neutral-500">
             {member.country} ({member.timeZone.split('/').pop()})
+          </p>
+          <p className="text-xs text-neutral-400 font-normal">
+            UTC{utcOffset}
           </p>
         </div>
         <div className="text-right">
