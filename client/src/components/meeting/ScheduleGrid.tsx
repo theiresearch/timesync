@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { formatDate, generateGoogleCalendarUrl, generateAppleCalendarUrl } from '@/utils/timeUtils';
+import { formatDate } from '@/utils/timeUtils';
 import { useTimeZone } from '@/context/TimeZoneContext';
 import { ScheduleColumn, TeamMemberWithLocalTime } from '@/types';
 import { convertTime } from '@/utils/timeUtils';
@@ -98,68 +98,19 @@ export default function ScheduleGrid() {
     return column.cells.every(cell => cell.available);
   };
   
-  // Generate meeting details for calendar integration
-  const getMeetingForCalendar = () => {
-    if (!selectedTime || !endTime) return null;
-    
-    // Convert 12-hour to 24-hour format for startTime
-    const [timePart, period] = selectedTime.split(' ');
-    const [hours, minutes] = timePart.split(':').map(Number);
-    const startHour = (period === 'PM' && hours !== 12) ? hours + 12 : (period === 'AM' && hours === 12) ? 0 : hours;
-    const startTime = `${startHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    
-    // Convert 12-hour to 24-hour format for endTime
-    const [endTimePart, endPeriod] = endTime.split(' ');
-    const [endHours, endMinutes] = endTimePart.split(':').map(Number);
-    const endHour = (endPeriod === 'PM' && endHours !== 12) ? endHours + 12 : (endPeriod === 'AM' && endHours === 12) ? 0 : endHours;
-    const endTimeFormatted = `${endHour.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
-    
-    const referenceTimezone = teamMembers.length > 0 ? teamMembers[0].timeZone : 'America/New_York';
-    
-    return {
-      title: meetingDetails.title,
-      date: meetingDetails.date,
-      startTime,
-      endTime: endTimeFormatted,
-      timezone: referenceTimezone,
-      description: `Meeting with: ${teamMembers.map(m => m.name).join(', ')}`
-    };
-  };
-  
-  // Handle calendar integration
-  const addToGoogleCalendar = () => {
-    const meeting = getMeetingForCalendar();
-    if (!meeting) return;
-    
-    const url = generateGoogleCalendarUrl(meeting);
-    window.open(url, '_blank');
-  };
-  
-  const addToAppleCalendar = () => {
-    const meeting = getMeetingForCalendar();
-    if (!meeting) return;
-    
-    const url = generateAppleCalendarUrl(meeting);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${meeting.title.replace(/\s+/g, '_')}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-  
   // Copy meeting details to clipboard
   const copyMeetingDetails = () => {
     if (!selectedTime || !endTime) return;
     
-    let details = `${meetingDetails.title}\n`;
-    details += `Date: ${formatDate(meetingDetails.date)}\n`;
-    details += `Time: ${selectedTime} - ${endTime}\n\n`;
-    details += `Team Member Times:\n`;
-    
-    // Get the reference time zone from the first team member
+    // Get the reference timezone (the first team member's time zone)
     const referenceTimezone = teamMembers.length > 0 ? teamMembers[0].timeZone : 'America/New_York';
     
+    let details = `📅 ${meetingDetails.title}\n`;
+    details += `Date: ${formatDate(meetingDetails.date)}\n`;
+    details += `Time: ${selectedTime} - ${endTime} (${teamMembers.length > 0 ? teamMembers[0].country : 'Local Time'})\n\n`;
+    
+    // Add converted times for each team member
+    details += `Team Member Times:\n`;
     teamMembers.forEach(member => {
       // Convert selected time to member's time zone
       const localDateTime = convertTime(
@@ -176,7 +127,8 @@ export default function ScheduleGrid() {
         member.timeZone
       );
       
-      details += `${member.flag} ${member.name} (${member.country}): ${localDateTime.time} - ${localEndDateTime.time} ${getTimezoneAbbr(member.timeZone)}`;
+      const tzAbbr = getTimezoneAbbr(member.timeZone);
+      details += `- ${member.flag} ${member.name} (${member.country}): ${localDateTime.time} - ${localEndDateTime.time} ${tzAbbr}`;
       
       // Add next day indicator if applicable
       if (localDateTime.date !== formatDate(meetingDetails.date)) {
@@ -281,7 +233,7 @@ export default function ScheduleGrid() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-neutral-500 mb-1">Date</p>
-              <p className="font-medium">{formatDate(meetingDetails.date)}</p>
+              <p className="font-medium">{formatDate(meetingDetails.date, 'YYYY.MM.DD')}</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500 mb-1">Time</p>
@@ -309,7 +261,7 @@ export default function ScheduleGrid() {
               );
               
               const timeZoneAbbr = getTimezoneAbbr(member.timeZone);
-              const nextDayIndicator = localDateTime.date !== formatDate(meetingDetails.date)
+              const nextDayIndicator = localDateTime.date !== formatDate(meetingDetails.date, 'YYYY.MM.DD')
                 ? ` (${localDateTime.date})`
                 : '';
               
@@ -329,15 +281,6 @@ export default function ScheduleGrid() {
       <div className="flex flex-wrap gap-3">
         <button 
           className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center"
-          disabled={!selectedTime}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-          Confirm Meeting
-        </button>
-        <button 
-          className="bg-white border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/5 transition-colors flex items-center"
           onClick={copyMeetingDetails}
           disabled={!selectedTime}
         >
@@ -346,26 +289,6 @@ export default function ScheduleGrid() {
             <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
           </svg>
           Copy Meeting Details
-        </button>
-        <button 
-          className="bg-white border border-neutral-300 text-textColor px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors flex items-center"
-          onClick={addToGoogleCalendar}
-          disabled={!selectedTime}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          Add to Google Calendar
-        </button>
-        <button 
-          className="bg-white border border-neutral-300 text-textColor px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors flex items-center"
-          onClick={addToAppleCalendar}
-          disabled={!selectedTime}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          Add to Apple Calendar
         </button>
       </div>
     </div>

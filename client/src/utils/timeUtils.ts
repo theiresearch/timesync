@@ -11,7 +11,7 @@ import { formatInTimeZone, toZonedTime, getTimezoneOffset } from "date-fns-tz";
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from "../types";
 
 const TIME_FORMAT = "HH:mm";
-const DATE_FORMAT = "yyyy-MM-dd";
+const DATE_FORMAT = "yyyy.MM.dd";
 const HOUR_FORMAT = "HH:mm";
 
 // Note: Time zone offsets may change due to daylight saving time (summer/winter time).
@@ -482,7 +482,7 @@ export function addLocalTimeToTeamMembers(
     const actualTimezone = timezoneObj?.ianaTimezone || member.timeZone;
 
     // Parse the working hours in the local timezone
-    const todayStr = formatInTimeZone(new Date(), actualTimezone, "yyyy-MM-dd");
+    const todayStr = formatInTimeZone(new Date(), actualTimezone, "yyyy.MM.dd");
     const workStart = parseISO(`${todayStr}T${member.workingHoursStart}`);
     const workEnd = parseISO(`${todayStr}T${member.workingHoursEnd}`);
 
@@ -499,8 +499,8 @@ export function addLocalTimeToTeamMembers(
 }
 
 // Format date for display
-export function formatDate(date: string): string {
-  return format(parseISO(date), "EEEE, MMMM d, yyyy");
+export function formatDate(date: string, formatStr: string = "EEEE, MMMM d, yyyy"): string {
+  return format(parseISO(date), formatStr);
 }
 
 // Generate Google Calendar URL

@@ -126,8 +126,9 @@ export default function Home() {
     const tzInfo = timezones.find((tz) => tz.value === userTimezone);
     const tzDisplay = tzInfo ? tzInfo.name : userTimezone;
     const refFlag = getCountryFlag(userTimezone);
+    const utcOffset = getActualUtcOffset(userTimezone, new Date(meetingDate));
 
-    proposal += `${refFlag} ${tzDisplay}: ${formattedDate} ${meetingTime}\n\n`;
+    proposal += `${refFlag} ${tzDisplay} (UTC${utcOffset}): ${formattedDate} ${meetingTime}\n\n`;
 
     // Other timezones
     timeZones.forEach((zone) => {
@@ -137,11 +138,11 @@ export default function Home() {
         userTimezone,
         zone.timezone,
       );
-
       const tzInfo = timezones.find((tz) => tz.value === zone.timezone);
       const tzDisplay = tzInfo ? tzInfo.name : zone.timezone;
+      const utcOffset = getActualUtcOffset(zone.timezone, new Date(meetingDate));
 
-      proposal += `${zone.flag} ${tzDisplay}: ${convertedTime.date} ${convertedTime.time}\n`;
+      proposal += `${zone.flag} ${tzDisplay} (UTC${utcOffset}): ${convertedTime.date} ${convertedTime.time}\n`;
     });
 
     setGeneratedText(proposal);
@@ -234,7 +235,11 @@ export default function Home() {
                           ?.name || userTimezone}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        UTC{getActualUtcOffset(userTimezone, meetingDate ? new Date(meetingDate) : undefined)}
+                        UTC
+                        {getActualUtcOffset(
+                          userTimezone,
+                          meetingDate ? new Date(meetingDate) : undefined,
+                        )}
                       </div>
                       {meetingDate && meetingTime && (
                         <div className="text-xs text-muted-foreground mt-1">
@@ -255,7 +260,15 @@ export default function Home() {
                     <SelectContent>
                       {timezones.map((tz) => (
                         <SelectItem key={tz.id || tz.value} value={tz.value}>
-                          {getCountryFlag(tz.value)} {tz.name} <span className="text-xs text-muted-foreground ml-1">(UTC{getActualUtcOffset(tz.value, meetingDate ? new Date(meetingDate) : undefined)})</span>
+                          {getCountryFlag(tz.value)} {tz.name}{" "}
+                          <span className="text-xs text-muted-foreground ml-1">
+                            (UTC
+                            {getActualUtcOffset(
+                              tz.value,
+                              meetingDate ? new Date(meetingDate) : undefined,
+                            )}
+                            )
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -278,7 +291,10 @@ export default function Home() {
                     (tz) => tz.value === zone.timezone,
                   );
                   const displayName = tzInfo ? tzInfo.name : zone.timezone;
-                  const utcOffset = getActualUtcOffset(zone.timezone, meetingDate ? new Date(meetingDate) : undefined);
+                  const utcOffset = getActualUtcOffset(
+                    zone.timezone,
+                    meetingDate ? new Date(meetingDate) : undefined,
+                  );
 
                   // Show converted time if meeting date and time are selected
                   const convertedTime =
@@ -329,7 +345,15 @@ export default function Home() {
                       <SelectContent>
                         {timezones.map((tz) => (
                           <SelectItem key={tz.id || tz.value} value={tz.value}>
-                            {getCountryFlag(tz.value)} {tz.name} <span className="text-xs text-muted-foreground ml-1">(UTC{getActualUtcOffset(tz.value, meetingDate ? new Date(meetingDate) : undefined)})</span>
+                            {getCountryFlag(tz.value)} {tz.name}{" "}
+                            <span className="text-xs text-muted-foreground ml-1">
+                              (UTC
+                              {getActualUtcOffset(
+                                tz.value,
+                                meetingDate ? new Date(meetingDate) : undefined,
+                              )}
+                              )
+                            </span>
                           </SelectItem>
                         ))}
                       </SelectContent>

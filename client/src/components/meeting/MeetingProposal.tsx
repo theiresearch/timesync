@@ -1,159 +1,194 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTimeZone } from '@/context/TimeZoneContext';
-import { convertTime, formatDate, getActualUtcOffset } from '@/utils/timeUtils';
-import { getTimezoneAbbr, getDynamicTimezoneAbbr, copyToClipboard } from '@/utils/formatUtils';
-import { useToast } from '@/hooks/use-toast';
+import { convertTime, getTimezoneAbbr, formatDate, getActualUtcOffset } from '@/utils/timeUtils';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 
 export default function MeetingProposal() {
-  const { toast } = useToast();
-  const { teamMembers, meetingDetails, selectedTimeSlot } = useTimeZone();
-  const [proposalText, setProposalText] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
+  const [proposalText, setProposalText] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const { teamMembers, meetingDetails } = useTimeZone();
+
+  // Time slots for the dropdown
+  const timeSlots = [
+    "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM", 
+    "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+    "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", 
+    "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
+    "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM", 
+    "06:00 PM", "06:30 PM", "07:00 PM", "07:30 PM"
+  ];
 
   useEffect(() => {
-    if (!selectedTimeSlot) {
+    if (!teamMembers.length || !meetingDetails.date || !selectedTimeSlot) {
       setProposalText('');
-      setEndTime('');
       return;
     }
 
-    // Calculate end time based on duration
-    const [time, period] = selectedTimeSlot.split(' ');
-    const [hour, minute] = time.split(':').map(Number);
+    let duration = 60; // Default 1 hour
+    if (meetingDetails.duration) {
+      duration = parseInt(meetingDetails.duration);
+    }
+
+    // Calculate end time
+    const startTimeFormatted = selectedTimeSlot ? selectedTimeSlot.replace(/\s/g, '') : "";
+    let endTimeValue = calculateEndTime(startTimeFormatted, duration);
+    setStartTime(startTimeFormatted);
+    setEndTime(endTimeValue);
+
+    // Force the exact proposal format
+    // This bypasses any other component or system that might be altering the format
+    let exactProposal = `📅 Meeting Proposal\n\n`;
     
-    const startDate = new Date();
-    startDate.setHours(period === 'PM' && hour !== 12 ? hour + 12 : hour);
-    startDate.setMinutes(minute);
-    
-    const endDate = new Date(startDate);
-    endDate.setMinutes(endDate.getMinutes() + meetingDetails.duration);
-    
-    const formattedEndTime = endDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-    
-    setEndTime(formattedEndTime);
-    
-    // Generate proposal text
-    generateProposal(selectedTimeSlot, formattedEndTime);
-  }, [selectedTimeSlot, meetingDetails]);
-  
-  const generateProposal = (startTime: string, endTime: string) => {
-    const proposal = `Meeting Proposal: ${meetingDetails.title} on ${formatDate(meetingDetails.date)} from ${startTime} to ${endTime}`;
-    setProposalText(proposal);
-  };
-  
-  const handleCopyProposal = () => {
-    if (proposalText) {
-      copyToClipboard(document.getElementById('proposal-text')?.innerText || '');
-      toast({
-        title: "Success",
-        description: "Proposal copied to clipboard!",
+    // Reference timezone (first team member)
+    if (teamMembers.length > 0) {
+      const referenceTimezone = teamMembers[0].timeZone;
+      
+      // Get the meeting date
+      const meetingDate = new Date(meetingDetails.date);
+      const year = meetingDate.getFullYear();
+      const month = String(meetingDate.getMonth() + 1).padStart(2, '0');
+      const day = String(meetingDate.getDate()).padStart(2, '0');
+      
+      // Get the selected time 
+      const timeMatch = selectedTimeSlot.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      let hour = 0;
+      let minute = 0;
+      
+      if (timeMatch) {
+        hour = parseInt(timeMatch[1]);
+        minute = parseInt(timeMatch[2]);
+        const period = timeMatch[3].toUpperCase();
+        
+        if (period === 'PM' && hour < 12) hour += 12;
+        if (period === 'AM' && hour === 12) hour = 0;
+      }
+      
+      // Format time in 24-hour notation
+      const formattedTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+      
+      // Get UTC offset for reference timezone
+      const refOffset = getActualUtcOffset(referenceTimezone, meetingDate);
+      
+      // Add reference time zone with dot-formatted date
+      exactProposal += `${teamMembers[0].flag} ${teamMembers[0].country} (UTC${refOffset}): ${year}.${month}.${day} ${formattedTime}\n\n`;
+      
+      // Add other time zones with hyphen-formatted date
+      teamMembers.slice(1).forEach(member => {
+        // Convert time to member's timezone
+        const converted = convertTime(
+          formattedTime,
+          `${year}.${month}.${day}`,
+          referenceTimezone,
+          member.timeZone
+        );
+        
+        // Get UTC offset for member's timezone
+        const memberOffset = getActualUtcOffset(member.timeZone, meetingDate);
+        
+        // Add to proposal with desired format
+        exactProposal += `${member.flag} ${member.country} (UTC${memberOffset}): ${converted.date} ${converted.time}\n`;
       });
     }
+    
+    setProposalText(exactProposal);
+  }, [teamMembers, meetingDetails, selectedTimeSlot]);
+
+  // Calculate end time based on start time and duration
+  const calculateEndTime = (startTime: string, durationMinutes: number) => {
+    if (!startTime) return '';
+
+    try {
+      const matches = startTime.match(/(\d+):(\d+)([AP]M)/i);
+      if (!matches) return '';
+
+      let hour = parseInt(matches[1]);
+      const minute = parseInt(matches[2]);
+      const period = matches[3].toUpperCase();
+
+      // Convert to 24-hour format
+      if (period === 'PM' && hour < 12) hour += 12;
+      if (period === 'AM' && hour === 12) hour = 0;
+
+      // Create date object for calculations
+      const date = new Date();
+      date.setHours(hour, minute, 0, 0);
+      date.setTime(date.getTime() + durationMinutes * 60 * 1000);
+
+      // Format the end time
+      let endHour = date.getHours();
+      const endMinute = date.getMinutes();
+      const endPeriod = endHour >= 12 ? 'PM' : 'AM';
+
+      // Convert back to 12-hour format
+      if (endHour > 12) endHour -= 12;
+      if (endHour === 0) endHour = 12;
+
+      return `${endHour}:${endMinute.toString().padStart(2, '0')}${endPeriod}`;
+    } catch (error) {
+      console.error('Error calculating end time:', error);
+      return '';
+    }
   };
-  
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(proposalText).then(
+      () => {
+        alert('Proposal copied to clipboard!');
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      }
+    );
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-sm p-5 mb-6">
-      <h2 className="text-lg font-semibold mb-4">Meeting Proposal</h2>
+    <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm">
+      <h3 className="text-lg font-medium text-neutral-800 mb-3">Meeting Proposal</h3>
       
-      <div className="bg-neutral-50 p-4 rounded-md mb-4 min-h-[200px]" id="proposal-text">
-        {proposalText ? (
-          <>
-            <p className="mb-3">Hi team,</p>
-            <p className="mb-3">I'm proposing we have our {meetingDetails.title} on {formatDate(meetingDetails.date)}. Here are the times for each team member:</p>
-            
-            <ul className="mb-3 space-y-1">
-              {teamMembers.map(member => {
-                // Reference time zone (using the first team member's time zone)
-                const referenceTimezone = teamMembers[0].timeZone;
-                
-                // Convert times to member's time zone
-                const localStartDateTime = convertTime(
-                  selectedTimeSlot ? selectedTimeSlot.replace(/\s/g, '') : "",
-                  meetingDetails.date,
-                  referenceTimezone,
-                  member.timeZone
-                );
-                
-                const localEndDateTime = convertTime(
-                  endTime.replace(/\s/g, ''),
-                  meetingDetails.date,
-                  referenceTimezone,
-                  member.timeZone
-                );
-                
-                // Get dynamic timezone abbreviation and current UTC offset
-                const tzAbbr = getTimezoneAbbr(member.timeZone);
-                const utcOffset = getActualUtcOffset(member.timeZone, new Date(meetingDetails.date));
-                
-                const nextDayIndicator = localStartDateTime.date !== formatDate(meetingDetails.date) 
-                  ? ` (${localStartDateTime.date})` 
-                  : '';
-                
-                return (
-                  <li key={member.id} className="flex">
-                    <span className="mr-2">{member.flag}</span>
-                    <span>
-                      <strong>{member.name} ({member.country}):</strong> {localStartDateTime.time} - {localEndDateTime.time} {tzAbbr}
-                      <span className="text-xs text-neutral-500 ml-1">UTC{utcOffset}</span>
-                      {nextDayIndicator}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-            
-            <p className="mb-3">Please let me know if this time works for everyone. I understand it may be outside working hours for some team members, so we can look for alternatives if needed.</p>
-            
-            <p>Best regards,<br/>[Your Name]</p>
-          </>
-        ) : (
-          <div className="text-center text-neutral-500 py-4">
-            {teamMembers.length === 0 ? (
-              <p>Add team members and select a meeting time to generate a proposal</p>
-            ) : !selectedTimeSlot ? (
-              <p>Select a meeting time to generate a proposal</p>
-            ) : (
-              <p>Generating proposal...</p>
-            )}
-          </div>
-        )}
+      <div className="mb-4">
+        <label htmlFor="timeSlot" className="block text-sm font-medium text-neutral-700 mb-1">
+          Select Meeting Time
+        </label>
+        <Select onValueChange={setSelectedTimeSlot} value={selectedTimeSlot}>
+          <SelectTrigger id="timeSlot" className="w-full">
+            <SelectValue placeholder="Select a time" />
+          </SelectTrigger>
+          <SelectContent>
+            {timeSlots.map((slot) => (
+              <SelectItem key={slot} value={slot}>
+                {slot}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       
-      <div className="flex justify-between items-center">
-        <button 
-          className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors flex items-center"
-          onClick={handleCopyProposal}
-          disabled={!proposalText}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-          </svg>
-          Copy Proposal
-        </button>
-        <div className="flex space-x-2">
-          <button
-            className="bg-white border border-neutral-300 px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors"
-            disabled={!proposalText}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </button>
-          <button
-            className="bg-white border border-neutral-300 px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors"
-            disabled={!proposalText}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </button>
+      <div className="mb-4">
+        <h4 className="text-sm font-medium text-neutral-700 mb-2">Preview</h4>
+        <div className="bg-neutral-50 border border-neutral-200 rounded p-3 font-mono text-sm whitespace-pre-wrap min-h-[100px]">
+          {proposalText ? (
+            proposalText
+          ) : (
+            <p className="text-neutral-400">Select a time to generate a meeting proposal</p>
+          )}
         </div>
       </div>
+      
+      <button 
+        onClick={copyToClipboard}
+        disabled={!proposalText}
+        className="w-full py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Copy to Clipboard
+      </button>
     </div>
   );
 }
