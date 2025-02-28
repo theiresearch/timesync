@@ -28,32 +28,23 @@ export const timezones = [
     id: "london-0",
   },
 
-  // UTC Positive Offsets (East of Greenwich)
-  // UTC+01:00
+  // UTC Positive Offsets (East of Greenwich) - ordered east to west (largest offset to smallest)
+  // UTC+10:00 (eastmost)
   {
-    name: "Paris",
-    value: "Europe/Paris",
-    ianaTimezone: "Europe/Paris",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "paris-1",
-  },
-  {
-    name: "Zurich",
-    value: "Europe/Zurich",
-    ianaTimezone: "Europe/Zurich",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "zurich-1",
+    name: "Melbourne",
+    value: "Australia/Melbourne",
+    offset: "+10:00",
+    abbr: "AEST/AEDT",
+    id: "melbourne-10",
   },
 
-  // UTC+04:00
+  // UTC+09:00
   {
-    name: "Dubai",
-    value: "Asia/Dubai",
-    offset: "+04:00",
-    abbr: "GST",
-    id: "dubai-4",
+    name: "Tokyo",
+    value: "Asia/Tokyo",
+    offset: "+09:00",
+    abbr: "JST",
+    id: "tokyo-9",
   },
 
   // UTC+08:00
@@ -79,33 +70,42 @@ export const timezones = [
     id: "singapore-8",
   },
 
-  // UTC+09:00
+  // UTC+04:00
   {
-    name: "Tokyo",
-    value: "Asia/Tokyo",
-    offset: "+09:00",
-    abbr: "JST",
-    id: "tokyo-9",
+    name: "Dubai",
+    value: "Asia/Dubai",
+    offset: "+04:00",
+    abbr: "GST",
+    id: "dubai-4",
   },
 
-  // UTC+10:00
+  // UTC+01:00 (westmost of the positive offsets)
   {
-    name: "Melbourne",
-    value: "Australia/Melbourne",
-    offset: "+10:00",
-    abbr: "AEST/AEDT",
-    id: "melbourne-10",
+    name: "Paris",
+    value: "Europe/Paris",
+    ianaTimezone: "Europe/Paris",
+    offset: "+01:00",
+    abbr: "CET/CEST",
+    id: "paris-1",
+  },
+  {
+    name: "Zurich",
+    value: "Europe/Zurich",
+    ianaTimezone: "Europe/Zurich",
+    offset: "+01:00",
+    abbr: "CET/CEST",
+    id: "zurich-1",
   },
 
-  // UTC Negative Offsets (West of Greenwich)
-  // UTC-05:00
+  // UTC Negative Offsets (West of Greenwich) - ordered west to east
+  // UTC-08:00 (westmost)
   {
-    name: "New York",
-    value: "America/New_York",
-    ianaTimezone: "America/New_York",
-    offset: "-05:00",
-    abbr: "EST/EDT",
-    id: "nyc-n5",
+    name: "San Francisco",
+    value: "City/San_Francisco",
+    ianaTimezone: "America/Los_Angeles",
+    offset: "-08:00",
+    abbr: "PST/PDT",
+    id: "sf-n8",
   },
 
   // UTC-06:00
@@ -117,14 +117,14 @@ export const timezones = [
     id: "austin-n6",
   },
 
-  // UTC-08:00
+  // UTC-05:00 (eastmost of the negative offsets)
   {
-    name: "San Francisco",
-    value: "City/San_Francisco",
-    ianaTimezone: "America/Los_Angeles",
-    offset: "-08:00",
-    abbr: "PST/PDT",
-    id: "sf-n8",
+    name: "New York",
+    value: "America/New_York",
+    ianaTimezone: "America/New_York",
+    offset: "-05:00",
+    abbr: "EST/EDT",
+    id: "nyc-n5",
   },
 ];
 
