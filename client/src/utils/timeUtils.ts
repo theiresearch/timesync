@@ -16,18 +16,18 @@ export const timezones = [
   
   // UTC Positive Offsets (East of Greenwich)
   // UTC+01:00
-  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', offset: '+01:00', abbr: 'CET/CEST', id: 'paris-1' },
-  { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', offset: '+01:00', abbr: 'CET/CEST', id: 'monaco-1' },
-  { name: 'Barcelona (UTC+01:00)', value: 'Europe/Madrid', offset: '+01:00', abbr: 'CET/CEST', id: 'barcelona-1' },
-  { name: 'Amsterdam (UTC+01:00)', value: 'Europe/Amsterdam', offset: '+01:00', abbr: 'CET/CEST', id: 'amsterdam-1' },
-  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', offset: '+01:00', abbr: 'CET/CEST', id: 'berlin-1' },
-  { name: 'Zurich (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'zurich-1' },
-  { name: 'Geneva (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'geneva-1' },
-  { name: 'Oslo (UTC+01:00)', value: 'Europe/Oslo', offset: '+01:00', abbr: 'CET/CEST', id: 'oslo-1' },
-  { name: 'Stockholm (UTC+01:00)', value: 'Europe/Stockholm', offset: '+01:00', abbr: 'CET/CEST', id: 'stockholm-1' },
-  { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', offset: '+01:00', abbr: 'CET/CEST', id: 'budapest-1' },
-  { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', offset: '+01:00', abbr: 'CET/CEST', id: 'spa-1' },
-  { name: 'Monza (UTC+01:00)', value: 'Europe/Rome', offset: '+01:00', abbr: 'CET/CEST', id: 'monza-1' },
+  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', ianaTimezone: 'Europe/Paris', offset: '+01:00', abbr: 'CET/CEST', id: 'paris-1' },
+  { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', ianaTimezone: 'Europe/Monaco', offset: '+01:00', abbr: 'CET/CEST', id: 'monaco-1' },
+  { name: 'Barcelona (UTC+01:00)', value: 'Europe/Madrid', ianaTimezone: 'Europe/Madrid', offset: '+01:00', abbr: 'CET/CEST', id: 'barcelona-1' },
+  { name: 'Amsterdam (UTC+01:00)', value: 'Europe/Amsterdam', ianaTimezone: 'Europe/Amsterdam', offset: '+01:00', abbr: 'CET/CEST', id: 'amsterdam-1' },
+  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', ianaTimezone: 'Europe/Berlin', offset: '+01:00', abbr: 'CET/CEST', id: 'berlin-1' },
+  { name: 'Zurich (UTC+01:00)', value: 'Europe/Zurich', ianaTimezone: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'zurich-1' },
+  { name: 'Geneva (UTC+01:00)', value: 'City/Geneva', ianaTimezone: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'geneva-1' },
+  { name: 'Oslo (UTC+01:00)', value: 'Europe/Oslo', ianaTimezone: 'Europe/Oslo', offset: '+01:00', abbr: 'CET/CEST', id: 'oslo-1' },
+  { name: 'Stockholm (UTC+01:00)', value: 'Europe/Stockholm', ianaTimezone: 'Europe/Stockholm', offset: '+01:00', abbr: 'CET/CEST', id: 'stockholm-1' },
+  { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', ianaTimezone: 'Europe/Budapest', offset: '+01:00', abbr: 'CET/CEST', id: 'budapest-1' },
+  { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', ianaTimezone: 'Europe/Brussels', offset: '+01:00', abbr: 'CET/CEST', id: 'spa-1' },
+  { name: 'Monza (UTC+01:00)', value: 'City/Monza', ianaTimezone: 'Europe/Rome', offset: '+01:00', abbr: 'CET/CEST', id: 'monza-1' },
   
   // UTC+02:00
   { name: 'Helsinki (UTC+02:00)', value: 'Europe/Helsinki', offset: '+02:00', abbr: 'EET/EEST', id: 'helsinki-2' },
@@ -61,9 +61,9 @@ export const timezones = [
   { name: 'Sao Paulo (UTC-03:00)', value: 'America/Sao_Paulo', offset: '-03:00', abbr: 'BRT', id: 'saopaulo-n3' },
   
   // UTC-05:00
-  { name: 'New York (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EST/EDT', id: 'nyc-n5' },
-  { name: 'Miami (UTC-05:00)', value: 'America/New_York', offset: '-05:00', abbr: 'EST/EDT', id: 'miami-n5' },
-  { name: 'Toronto (UTC-05:00)', value: 'America/Toronto', offset: '-05:00', abbr: 'EST/EDT', id: 'toronto-n5' },
+  { name: 'New York (UTC-05:00)', value: 'America/New_York', ianaTimezone: 'America/New_York', offset: '-05:00', abbr: 'EST/EDT', id: 'nyc-n5' },
+  { name: 'Miami (UTC-05:00)', value: 'City/Miami', ianaTimezone: 'America/New_York', offset: '-05:00', abbr: 'EST/EDT', id: 'miami-n5' },
+  { name: 'Toronto (UTC-05:00)', value: 'America/Toronto', ianaTimezone: 'America/Toronto', offset: '-05:00', abbr: 'EST/EDT', id: 'toronto-n5' },
   
   // UTC-06:00
   { name: 'Austin (UTC-06:00)', value: 'America/Chicago', offset: '-06:00', abbr: 'CST/CDT', id: 'austin-n6' },
@@ -73,8 +73,8 @@ export const timezones = [
   { name: 'Las Vegas (UTC-07:00)', value: 'America/Phoenix', offset: '-07:00', abbr: 'MST', id: 'vegas-n7' },
   
   // UTC-08:00
-  { name: 'Los Angeles (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PST/PDT', id: 'la-n8' },
-  { name: 'San Francisco (UTC-08:00)', value: 'America/Los_Angeles', offset: '-08:00', abbr: 'PST/PDT', id: 'sf-n8' },
+  { name: 'Los Angeles (UTC-08:00)', value: 'City/Los_Angeles', ianaTimezone: 'America/Los_Angeles', offset: '-08:00', abbr: 'PST/PDT', id: 'la-n8' },
+  { name: 'San Francisco (UTC-08:00)', value: 'City/San_Francisco', ianaTimezone: 'America/Los_Angeles', offset: '-08:00', abbr: 'PST/PDT', id: 'sf-n8' },
   { name: 'Vancouver (UTC-08:00)', value: 'America/Vancouver', offset: '-08:00', abbr: 'PST/PDT', id: 'vancouver-n8' },
 ];
 
@@ -92,29 +92,12 @@ export function convertTime(
     let hour = 0;
     let minute = 0;
     
-    // Debug info
-    console.log('Converting time:', { time, date, fromTimezone, toTimezone });
+    // Find the timezone objects to check if they have an ianaTimezone property
+    const fromTimezoneObj = timezones.find(tz => tz.value === fromTimezone);
+    const toTimezoneObj = timezones.find(tz => tz.value === toTimezone);
     
-    // Check if same timezone
-    const isSameTimezone = fromTimezone === toTimezone;
-    console.log('Is same timezone:', isSameTimezone);
-    
-    // For same timezone, we should get the same time, skip conversion
-    if (isSameTimezone) {
-      // If it's the same timezone, we shouldn't need any conversion
-      // Just format the time properly
-      return {
-        time: time.includes('AM') || time.includes('PM') ? time : formatTimeDisplay(time),
-        date: date
-      };
-    }
-    
-    // Use IANA timezone identifiers directly
-    const actualFromTimezone = fromTimezone;
-    const actualToTimezone = toTimezone;
-    
-    // Add more debug info
-    console.log('Using timezones:', { actualFromTimezone, actualToTimezone });
+    const actualFromTimezone = fromTimezoneObj?.ianaTimezone || fromTimezone;
+    const actualToTimezone = toTimezoneObj?.ianaTimezone || toTimezone;
     
     // Handle different time formats
     if (time.includes('AM') || time.includes('PM')) {
@@ -179,8 +162,9 @@ export function convertTime(
 export function getCurrentTimeInTimezone(timezone: string): { time: string; date: string } {
   const now = new Date();
   
-  // Use the IANA timezone identifier directly
-  const actualTimezone = timezone;
+  // Find the timezone object to check if it has an ianaTimezone property
+  const timezoneObj = timezones.find(tz => tz.value === timezone);
+  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
   
   return {
     time: formatInTimeZone(now, actualTimezone, TIME_FORMAT),
@@ -235,8 +219,9 @@ export function addLocalTimeToTeamMembers(
     // Parse the current time and working hours in the member's timezone
     const now = parseISO(`${date}T${time}`);
     
-    // Use the IANA timezone identifier directly
-    const actualTimezone = member.timeZone;
+    // Find the timezone object to check if it has an ianaTimezone property
+    const timezoneObj = timezones.find(tz => tz.value === member.timeZone);
+    const actualTimezone = timezoneObj?.ianaTimezone || member.timeZone;
     
     // Parse the working hours in the local timezone
     const todayStr = formatInTimeZone(new Date(), actualTimezone, 'yyyy-MM-dd');
@@ -271,8 +256,9 @@ export function generateGoogleCalendarUrl(meeting: {
 }): string {
   const { title, date, startTime, endTime, timezone, description = '' } = meeting;
   
-  // Use the IANA timezone identifier directly
-  const actualTimezone = timezone;
+  // Find the timezone object to check if it has an ianaTimezone property
+  const timezoneObj = timezones.find(tz => tz.value === timezone);
+  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
   
   // Format date and times for Google Calendar
   const startDateTime = formatISO(parseISO(`${date}T${startTime}`));
@@ -299,8 +285,9 @@ export function generateAppleCalendarUrl(meeting: {
 }): string {
   const { title, date, startTime, endTime, timezone, description = '' } = meeting;
   
-  // Use the IANA timezone identifier directly
-  const actualTimezone = timezone;
+  // Find the timezone object to check if it has an ianaTimezone property
+  const timezoneObj = timezones.find(tz => tz.value === timezone);
+  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
   
   // Format date and times for iCalendar format
   const startDateTime = formatISO(parseISO(`${date}T${startTime}`));
