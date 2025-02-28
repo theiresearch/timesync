@@ -153,22 +153,24 @@ export default function MeetingProposal() {
     <div className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm">
       <h3 className="text-lg font-medium text-neutral-800 mb-3">Meeting Proposal</h3>
       
-      <div className="mb-4">
-        <label htmlFor="timeSlot" className="block text-sm font-medium text-neutral-700 mb-1">
-          Select Meeting Time
-        </label>
-        <Select onValueChange={setSelectedTimeSlot} value={selectedTimeSlot}>
-          <SelectTrigger id="timeSlot" className="w-full">
-            <SelectValue placeholder="Select a time" />
-          </SelectTrigger>
-          <SelectContent>
-            {timeSlots.map((slot) => (
-              <SelectItem key={slot} value={slot}>
-                {slot}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label htmlFor="timeSlot" className="block text-sm font-medium text-neutral-700 mb-1">
+            Meeting Time Slot
+          </label>
+          <Select onValueChange={setSelectedTimeSlot} value={selectedTimeSlot} sensitivity="high">
+            <SelectTrigger id="timeSlot" className="w-full">
+              <SelectValue placeholder="Select a time" />
+            </SelectTrigger>
+            <SelectContent>
+              {timeSlots.map((slot) => (
+                <SelectItem key={slot} value={slot}>
+                  {slot}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       
       <div className="mb-4">

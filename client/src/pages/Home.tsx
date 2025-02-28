@@ -252,7 +252,7 @@ export default function Home() {
                       )}
                     </div>
                   </div>
-                  <Select value={userTimezone} onValueChange={setUserTimezone}>
+                  <Select value={userTimezone} onValueChange={setUserTimezone} sensitivity="high">
                     <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted focus:ring-0 focus:ring-offset-0">
                       <CalendarIcon className="h-4 w-4" />
                       <span className="sr-only">Change timezone</span>
@@ -338,7 +338,7 @@ export default function Home() {
                     Add New Time Zone
                   </h3>
                   <div className="flex gap-2">
-                    <Select value={newTimeZone} onValueChange={setNewTimeZone}>
+                    <Select value={newTimeZone} onValueChange={setNewTimeZone} sensitivity="high">
                       <SelectTrigger className="flex-1">
                         <SelectValue placeholder="Select time zone" />
                       </SelectTrigger>
@@ -491,7 +491,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} The I Research
+              {new Date().getFullYear()} The I Research
             </span>
             <div className="flex gap-4 items-center">
               <a
