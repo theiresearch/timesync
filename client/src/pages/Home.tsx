@@ -23,10 +23,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
-import {
-  timezones,
-  convertTime,
-} from "../utils/timeUtils";
+import { timezones, convertTime } from "../utils/timeUtils";
 import { getCountryFlag } from "../utils/formatUtils";
 import {
   PlusCircle,
@@ -52,7 +49,9 @@ export default function Home() {
   const [newTimeZone, setNewTimeZone] = React.useState("");
 
   // Meeting state
-  const [meetingDate, setMeetingDate] = React.useState<Date | undefined>(new Date());
+  const [meetingDate, setMeetingDate] = React.useState<Date | undefined>(
+    new Date(),
+  );
   const [meetingTime, setMeetingTime] = React.useState("09:00");
   const [meetingLink, setMeetingLink] = React.useState("");
 
@@ -452,10 +451,10 @@ export default function Home() {
       </main>
 
       {/* Footer - Center Aligned */}
-      <footer className="bg-background/80 dark:bg-gray-900/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+      <footer className="bg-background/80 dark:bg-gray-900/80 backdrop-blur-sm mt-auto">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
           <motion.div
-            className="flex items-center justify-between"
+            className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
