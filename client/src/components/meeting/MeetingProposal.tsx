@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { useTimeZone } from '@/context/TimeZoneContext';
 import { convertTime, formatDate } from '@/utils/timeUtils';
 import { getTimezoneAbbr, copyToClipboard } from '@/utils/formatUtils';
@@ -39,75 +38,30 @@ export default function MeetingProposal() {
     
     // Generate proposal text
     generateProposal(selectedTimeSlot, formattedEndTime);
-  }, [selectedTimeSlot, meetingDetails, teamMembers]);
-
+  }, [selectedTimeSlot, meetingDetails]);
+  
   const generateProposal = (startTime: string, endTime: string) => {
-    if (!startTime || !endTime || teamMembers.length === 0) return;
-    
-    const formattedDate = formatDate(meetingDetails.date);
-    
-    let proposal = `${meetingDetails.title}\n\nHi team,\n\nI'm proposing we have our ${meetingDetails.title} on ${formattedDate}. Here are the times for each team member:\n\n`;
-    
-    // Reference time zone (using the first team member's time zone)
-    const referenceTimezone = teamMembers[0].timeZone;
-    
-    // Add time for each team member
-    teamMembers.forEach(member => {
-      // Convert times to member's time zone
-      const localStartDateTime = convertTime(
-        startTime.replace(/\s/g, ''),
-        meetingDetails.date,
-        referenceTimezone,
-        member.timeZone
-      );
-      
-      const localEndDateTime = convertTime(
-        endTime.replace(/\s/g, ''),
-        meetingDetails.date,
-        referenceTimezone,
-        member.timeZone
-      );
-      
-      const tzAbbr = getTimezoneAbbr(member.timeZone);
-      const nextDayIndicator = localStartDateTime.date !== formattedDate 
-        ? ` (${localStartDateTime.date})` 
-        : '';
-      
-      proposal += `${member.flag} ${member.name} (${member.country}): ${localStartDateTime.time} - ${localEndDateTime.time} ${tzAbbr}${nextDayIndicator}\n`;
-    });
-    
-    proposal += `\nPlease let me know if this time works for everyone. I understand it may be outside working hours for some team members, so we can look for alternatives if needed.\n\nBest regards,\n[Your Name]`;
-    
+    const proposal = `Meeting Proposal: ${meetingDetails.title} on ${formatDate(meetingDetails.date)} from ${startTime} to ${endTime}`;
     setProposalText(proposal);
   };
-
-  const handleCopyProposal = async () => {
-    if (!proposalText) return;
-    
-    const success = await copyToClipboard(proposalText);
-    
-    if (success) {
+  
+  const handleCopyProposal = () => {
+    if (proposalText) {
+      copyToClipboard(document.getElementById('proposal-text')?.innerText || '');
       toast({
-        title: "Copied!",
-        description: "Meeting proposal copied to clipboard",
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: "Failed to copy meeting proposal",
-        variant: "destructive"
+        title: "Success",
+        description: "Proposal copied to clipboard!",
       });
     }
   };
-
+  
   return (
-    <div className="bg-white rounded-lg shadow-sm p-5">
+    <div className="bg-white rounded-lg shadow-sm p-5 mb-6">
       <h2 className="text-lg font-semibold mb-4">Meeting Proposal</h2>
       
-      <div className="border border-neutral-200 rounded-md p-4 bg-background mb-4">
+      <div className="bg-neutral-50 p-4 rounded-md mb-4 min-h-[200px]" id="proposal-text">
         {proposalText ? (
           <>
-            <h3 className="font-medium mb-3">{meetingDetails.title}</h3>
             <p className="mb-3">Hi team,</p>
             <p className="mb-3">I'm proposing we have our {meetingDetails.title} on {formatDate(meetingDetails.date)}. Here are the times for each team member:</p>
             
@@ -118,7 +72,7 @@ export default function MeetingProposal() {
                 
                 // Convert times to member's time zone
                 const localStartDateTime = convertTime(
-                  selectedTimeSlot.replace(/\s/g, ''),
+                  selectedTimeSlot ? selectedTimeSlot.replace(/\s/g, '') : "",
                   meetingDetails.date,
                   referenceTimezone,
                   member.timeZone
@@ -163,7 +117,7 @@ export default function MeetingProposal() {
       </div>
       
       <div className="flex justify-between items-center">
-        <Button 
+        <button 
           className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary/90 transition-colors flex items-center"
           onClick={handleCopyProposal}
           disabled={!proposalText}
@@ -173,28 +127,24 @@ export default function MeetingProposal() {
             <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
           </svg>
           Copy Proposal
-        </Button>
+        </button>
         <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <button
             className="bg-white border border-neutral-300 px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors"
             disabled={!proposalText}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
+          </button>
+          <button
             className="bg-white border border-neutral-300 px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors"
             disabled={!proposalText}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-          </Button>
+          </button>
         </div>
       </div>
     </div>

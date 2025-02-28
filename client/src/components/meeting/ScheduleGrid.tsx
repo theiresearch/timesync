@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { formatDate, generateGoogleCalendarUrl, generateAppleCalendarUrl } from '@/utils/timeUtils';
 import { useTimeZone } from '@/context/TimeZoneContext';
 import { ScheduleColumn, TeamMemberWithLocalTime } from '@/types';
@@ -75,7 +74,7 @@ export default function ScheduleGrid() {
     if (selectedTime === time) {
       setSelectedTime(null);
       setEndTime(null);
-      selectTimeSlot(null);
+      selectTimeSlot("");  
       return;
     }
     
@@ -328,7 +327,7 @@ export default function ScheduleGrid() {
 
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-3">
-        <Button 
+        <button 
           className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center"
           disabled={!selectedTime}
         >
@@ -336,9 +335,8 @@ export default function ScheduleGrid() {
             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
           </svg>
           Confirm Meeting
-        </Button>
-        <Button 
-          variant="outline" 
+        </button>
+        <button 
           className="bg-white border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/5 transition-colors flex items-center"
           onClick={copyMeetingDetails}
           disabled={!selectedTime}
@@ -348,9 +346,8 @@ export default function ScheduleGrid() {
             <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
           </svg>
           Copy Meeting Details
-        </Button>
-        <Button 
-          variant="outline" 
+        </button>
+        <button 
           className="bg-white border border-neutral-300 text-textColor px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors flex items-center"
           onClick={addToGoogleCalendar}
           disabled={!selectedTime}
@@ -359,9 +356,8 @@ export default function ScheduleGrid() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           Add to Google Calendar
-        </Button>
-        <Button 
-          variant="outline" 
+        </button>
+        <button 
           className="bg-white border border-neutral-300 text-textColor px-4 py-2 rounded-md hover:bg-neutral-50 transition-colors flex items-center"
           onClick={addToAppleCalendar}
           disabled={!selectedTime}
@@ -370,7 +366,7 @@ export default function ScheduleGrid() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           Add to Apple Calendar
-        </Button>
+        </button>
       </div>
     </div>
   );
