@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "wouter";
+import * as React from "react";
 
 import {
   Card,
@@ -7,62 +6,59 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { useToast } from "@/hooks/use-toast";
+} from "../components/ui/select";
+import { Textarea } from "../components/ui/textarea";
+import { useToast } from "../hooks/use-toast";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import {
   timezones,
-  getCurrentTimeInTimezone,
   convertTime,
-} from "@/utils/timeUtils";
-import { getCountryFlag, copyToClipboard } from "@/utils/formatUtils";
+} from "../utils/timeUtils";
+import { getCountryFlag } from "../utils/formatUtils";
 import {
   PlusCircle,
   Clock,
   Calendar as CalendarIcon,
   Trash2,
   Copy,
-  Settings,
 } from "lucide-react";
 
 export default function Home() {
   // User timezone state
-  const [userTimezone, setUserTimezone] = useState(
+  const [userTimezone, setUserTimezone] = React.useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
 
   // Additional time zones state
-  const [timeZones, setTimeZones] = useState([
+  const [timeZones, setTimeZones] = React.useState([
     { id: 1, timezone: "Europe/London", flag: "🇬🇧" },
     { id: 2, timezone: "America/New_York", flag: "🇺🇸" },
   ]);
 
   // New time zone form state
-  const [newTimeZone, setNewTimeZone] = useState("");
+  const [newTimeZone, setNewTimeZone] = React.useState("");
 
   // Meeting state
-  const [meetingDate, setMeetingDate] = useState<Date | undefined>(new Date());
-  const [meetingTime, setMeetingTime] = useState("09:00");
-  const [meetingLink, setMeetingLink] = useState("");
+  const [meetingDate, setMeetingDate] = React.useState<Date | undefined>(new Date());
+  const [meetingTime, setMeetingTime] = React.useState("09:00");
+  const [meetingLink, setMeetingLink] = React.useState("");
 
   // Meeting proposal state
-  const [generatedText, setGeneratedText] = useState("");
-  const [editableProposal, setEditableProposal] = useState("");
+  const [generatedText, setGeneratedText] = React.useState("");
+  const [editableProposal, setEditableProposal] = React.useState("");
 
   const { toast } = useToast();
 
@@ -251,7 +247,7 @@ export default function Home() {
                   </div>
                   <Select value={userTimezone} onValueChange={setUserTimezone}>
                     <SelectTrigger className="w-[40px] h-[40px] p-0 rounded-full border-none shadow-none bg-transparent hover:bg-muted focus:ring-0 focus:ring-offset-0">
-                      <Settings className="h-4 w-4" />
+                      <CalendarIcon className="h-4 w-4" />
                       <span className="sr-only">Change timezone</span>
                     </SelectTrigger>
                     <SelectContent>
@@ -465,7 +461,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <span className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} The I Research
+              {new Date().getFullYear()} The I Research
             </span>
             <div className="flex gap-4 items-center">
               <a
