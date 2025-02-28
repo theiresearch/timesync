@@ -16,18 +16,18 @@ export const timezones = [
   
   // UTC Positive Offsets (East of Greenwich)
   // UTC+01:00
-  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', ianaTimezone: 'Europe/Paris', offset: '+01:00', abbr: 'CET/CEST', id: 'paris-1' },
-  { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', ianaTimezone: 'Europe/Monaco', offset: '+01:00', abbr: 'CET/CEST', id: 'monaco-1' },
-  { name: 'Barcelona (UTC+01:00)', value: 'Europe/Madrid', ianaTimezone: 'Europe/Madrid', offset: '+01:00', abbr: 'CET/CEST', id: 'barcelona-1' },
-  { name: 'Amsterdam (UTC+01:00)', value: 'Europe/Amsterdam', ianaTimezone: 'Europe/Amsterdam', offset: '+01:00', abbr: 'CET/CEST', id: 'amsterdam-1' },
-  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', ianaTimezone: 'Europe/Berlin', offset: '+01:00', abbr: 'CET/CEST', id: 'berlin-1' },
-  { name: 'Zurich (UTC+01:00)', value: 'Europe/Zurich', ianaTimezone: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'zurich-1' },
+  { name: 'Paris (UTC+01:00)', value: 'Europe/Paris', offset: '+01:00', abbr: 'CET/CEST', id: 'paris-1' },
+  { name: 'Monaco (UTC+01:00)', value: 'Europe/Monaco', offset: '+01:00', abbr: 'CET/CEST', id: 'monaco-1' },
+  { name: 'Barcelona (UTC+01:00)', value: 'Europe/Madrid', offset: '+01:00', abbr: 'CET/CEST', id: 'barcelona-1' },
+  { name: 'Amsterdam (UTC+01:00)', value: 'Europe/Amsterdam', offset: '+01:00', abbr: 'CET/CEST', id: 'amsterdam-1' },
+  { name: 'Berlin (UTC+01:00)', value: 'Europe/Berlin', offset: '+01:00', abbr: 'CET/CEST', id: 'berlin-1' },
+  { name: 'Zurich (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'zurich-1' },
   { name: 'Geneva (UTC+01:00)', value: 'Europe/Zurich', offset: '+01:00', abbr: 'CET/CEST', id: 'geneva-1' },
-  { name: 'Oslo (UTC+01:00)', value: 'Europe/Oslo', ianaTimezone: 'Europe/Oslo', offset: '+01:00', abbr: 'CET/CEST', id: 'oslo-1' },
-  { name: 'Stockholm (UTC+01:00)', value: 'Europe/Stockholm', ianaTimezone: 'Europe/Stockholm', offset: '+01:00', abbr: 'CET/CEST', id: 'stockholm-1' },
-  { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', ianaTimezone: 'Europe/Budapest', offset: '+01:00', abbr: 'CET/CEST', id: 'budapest-1' },
-  { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', ianaTimezone: 'Europe/Brussels', offset: '+01:00', abbr: 'CET/CEST', id: 'spa-1' },
-  { name: 'Monza (UTC+01:00)', value: 'City/Monza', ianaTimezone: 'Europe/Rome', offset: '+01:00', abbr: 'CET/CEST', id: 'monza-1' },
+  { name: 'Oslo (UTC+01:00)', value: 'Europe/Oslo', offset: '+01:00', abbr: 'CET/CEST', id: 'oslo-1' },
+  { name: 'Stockholm (UTC+01:00)', value: 'Europe/Stockholm', offset: '+01:00', abbr: 'CET/CEST', id: 'stockholm-1' },
+  { name: 'Budapest (UTC+01:00)', value: 'Europe/Budapest', offset: '+01:00', abbr: 'CET/CEST', id: 'budapest-1' },
+  { name: 'Spa (UTC+01:00)', value: 'Europe/Brussels', offset: '+01:00', abbr: 'CET/CEST', id: 'spa-1' },
+  { name: 'Monza (UTC+01:00)', value: 'Europe/Rome', offset: '+01:00', abbr: 'CET/CEST', id: 'monza-1' },
   
   // UTC+02:00
   { name: 'Helsinki (UTC+02:00)', value: 'Europe/Helsinki', offset: '+02:00', abbr: 'EET/EEST', id: 'helsinki-2' },
