@@ -203,7 +203,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <img
-              src="/logo.png"
+              src="/favicon.svg"
               alt="The I Research Logo"
               className="w-8 h-8 object-cover rounded"
             />
@@ -477,21 +477,25 @@ export default function Home() {
                 <FontAwesomeIcon icon={faXTwitter} className="h-4 w-4" />
               </a>
               <a
-                href="https://github.com/theiresearch"
+                href="https://github.com/theiresearch/timesync"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <FontAwesomeIcon icon={faGithub} className="h-4 w-4" />
               </a>
-              <a 
-                href="https://theiresearch.com"
+              <a
+                href="http://timesync.theiresearch.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
               >
                 <div className="h-4 w-4 rounded-[1px] overflow-hidden flex items-center justify-center">
-                  <img src="/logo.png" alt="The I Research" className="h-4 w-4 object-cover" />
+                  <img
+                    src="/favicon.svg"
+                    alt="The I Research"
+                    className="h-4 w-4 object-cover"
+                  />
                 </div>
               </a>
             </div>
