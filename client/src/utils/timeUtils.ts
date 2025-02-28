@@ -7,7 +7,7 @@ import {
   isWithinInterval,
   getMonth,
 } from "date-fns";
-import { formatInTimeZone, toZonedTime, getTimezoneOffset } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 import { TimeSlot, TeamMember, TeamMemberWithLocalTime } from "../types";
 
 const TIME_FORMAT = "HH:mm";
@@ -57,6 +57,13 @@ export const timezones = [
   },
 
   // UTC+08:00
+  {
+    name: "Shanghai",
+    value: "Asia/Shanghai",
+    offset: "+08:00",
+    abbr: "CST",
+    id: "shanghai-8",
+  },
   {
     name: "Hong Kong",
     value: "Asia/Hong_Kong",
