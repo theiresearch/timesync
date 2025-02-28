@@ -92,9 +92,29 @@ export function convertTime(
     let hour = 0;
     let minute = 0;
     
+    // Debug info
+    console.log('Converting time:', { time, date, fromTimezone, toTimezone });
+    
+    // Check if same timezone
+    const isSameTimezone = fromTimezone === toTimezone;
+    console.log('Is same timezone:', isSameTimezone);
+    
+    // For same timezone, we should get the same time, skip conversion
+    if (isSameTimezone) {
+      // If it's the same timezone, we shouldn't need any conversion
+      // Just format the time properly
+      return {
+        time: time.includes('AM') || time.includes('PM') ? time : formatTimeDisplay(time),
+        date: date
+      };
+    }
+    
     // Use IANA timezone identifiers directly
     const actualFromTimezone = fromTimezone;
     const actualToTimezone = toTimezone;
+    
+    // Add more debug info
+    console.log('Using timezones:', { actualFromTimezone, actualToTimezone });
     
     // Handle different time formats
     if (time.includes('AM') || time.includes('PM')) {
