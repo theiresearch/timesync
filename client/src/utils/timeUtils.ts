@@ -39,38 +39,6 @@ export const timezones = [
     id: "paris-1",
   },
   {
-    name: "Monaco",
-    value: "Europe/Monaco",
-    ianaTimezone: "Europe/Monaco",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "monaco-1",
-  },
-  {
-    name: "Barcelona",
-    value: "Europe/Madrid",
-    ianaTimezone: "Europe/Madrid",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "barcelona-1",
-  },
-  {
-    name: "Amsterdam",
-    value: "Europe/Amsterdam",
-    ianaTimezone: "Europe/Amsterdam",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "amsterdam-1",
-  },
-  {
-    name: "Berlin",
-    value: "Europe/Berlin",
-    ianaTimezone: "Europe/Berlin",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "berlin-1",
-  },
-  {
     name: "Zurich",
     value: "Europe/Zurich",
     ianaTimezone: "Europe/Zurich",
@@ -78,81 +46,8 @@ export const timezones = [
     abbr: "CET/CEST",
     id: "zurich-1",
   },
-  {
-    name: "Geneva",
-    value: "City/Geneva",
-    ianaTimezone: "Europe/Zurich",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "geneva-1",
-  },
-  {
-    name: "Oslo",
-    value: "Europe/Oslo",
-    ianaTimezone: "Europe/Oslo",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "oslo-1",
-  },
-  {
-    name: "Stockholm",
-    value: "Europe/Stockholm",
-    ianaTimezone: "Europe/Stockholm",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "stockholm-1",
-  },
-  {
-    name: "Budapest",
-    value: "Europe/Budapest",
-    ianaTimezone: "Europe/Budapest",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "budapest-1",
-  },
-  {
-    name: "Spa",
-    value: "Europe/Brussels",
-    ianaTimezone: "Europe/Brussels",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "spa-1",
-  },
-  {
-    name: "Monza",
-    value: "City/Monza",
-    ianaTimezone: "Europe/Rome",
-    offset: "+01:00",
-    abbr: "CET/CEST",
-    id: "monza-1",
-  },
-
-  // UTC+02:00
-  {
-    name: "Helsinki",
-    value: "Europe/Helsinki",
-    offset: "+02:00",
-    abbr: "EET/EEST",
-    id: "helsinki-2",
-  },
-
-  // UTC+03:00
-  {
-    name: "Moscow",
-    value: "Europe/Moscow",
-    offset: "+03:00",
-    abbr: "MSK",
-    id: "moscow-3",
-  },
 
   // UTC+04:00
-  {
-    name: "Baku",
-    value: "Asia/Baku",
-    offset: "+04:00",
-    abbr: "AZT",
-    id: "baku-4",
-  },
   {
     name: "Dubai",
     value: "Asia/Dubai",
@@ -163,25 +58,11 @@ export const timezones = [
 
   // UTC+08:00
   {
-    name: "Shanghai",
-    value: "Asia/Shanghai",
-    offset: "+08:00",
-    abbr: "CST",
-    id: "shanghai-8",
-  },
-  {
     name: "Hong Kong",
     value: "Asia/Hong_Kong",
     offset: "+08:00",
     abbr: "HKT",
     id: "hongkong-8",
-  },
-  {
-    name: "Taipei",
-    value: "Asia/Taipei",
-    offset: "+08:00",
-    abbr: "CST",
-    id: "taipei-8",
   },
   {
     name: "Singapore",
@@ -192,20 +73,6 @@ export const timezones = [
   },
 
   // UTC+09:00
-  {
-    name: "Seoul",
-    value: "Asia/Seoul",
-    offset: "+09:00",
-    abbr: "KST",
-    id: "seoul-9",
-  },
-  {
-    name: "Pyongyang",
-    value: "Asia/Pyongyang",
-    offset: "+09:00",
-    abbr: "KST",
-    id: "pyongyang-9",
-  },
   {
     name: "Tokyo",
     value: "Asia/Tokyo",
@@ -223,25 +90,7 @@ export const timezones = [
     id: "melbourne-10",
   },
 
-  // UTC+12:00
-  {
-    name: "Auckland",
-    value: "Pacific/Auckland",
-    offset: "+12:00",
-    abbr: "NZST/NZDT",
-    id: "auckland-12",
-  },
-
   // UTC Negative Offsets (West of Greenwich)
-  // UTC-03:00
-  {
-    name: "Sao Paulo",
-    value: "America/Sao_Paulo",
-    offset: "-03:00",
-    abbr: "BRT",
-    id: "saopaulo-n3",
-  },
-
   // UTC-05:00
   {
     name: "New York",
@@ -250,22 +99,6 @@ export const timezones = [
     offset: "-05:00",
     abbr: "EST/EDT",
     id: "nyc-n5",
-  },
-  {
-    name: "Miami",
-    value: "City/Miami",
-    ianaTimezone: "America/New_York",
-    offset: "-05:00",
-    abbr: "EST/EDT",
-    id: "miami-n5",
-  },
-  {
-    name: "Toronto",
-    value: "America/Toronto",
-    ianaTimezone: "America/Toronto",
-    offset: "-05:00",
-    abbr: "EST/EDT",
-    id: "toronto-n5",
   },
 
   // UTC-06:00
@@ -276,32 +109,8 @@ export const timezones = [
     abbr: "CST/CDT",
     id: "austin-n6",
   },
-  {
-    name: "Mexico City",
-    value: "America/Mexico_City",
-    offset: "-06:00",
-    abbr: "CST/CDT",
-    id: "mexico-n6",
-  },
-
-  // UTC-07:00
-  {
-    name: "Las Vegas",
-    value: "America/Phoenix",
-    offset: "-07:00",
-    abbr: "MST",
-    id: "vegas-n7",
-  },
 
   // UTC-08:00
-  {
-    name: "Los Angeles",
-    value: "City/Los_Angeles",
-    ianaTimezone: "America/Los_Angeles",
-    offset: "-08:00",
-    abbr: "PST/PDT",
-    id: "la-n8",
-  },
   {
     name: "San Francisco",
     value: "City/San_Francisco",
@@ -309,13 +118,6 @@ export const timezones = [
     offset: "-08:00",
     abbr: "PST/PDT",
     id: "sf-n8",
-  },
-  {
-    name: "Vancouver",
-    value: "America/Vancouver",
-    offset: "-08:00",
-    abbr: "PST/PDT",
-    id: "vancouver-n8",
   },
 ];
 
