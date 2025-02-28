@@ -1,0 +1,17 @@
+{
+  "name": "timesync-test",
+  "version": "1.0.0",
+  "description": "TimeSync testing environment",
+  "type": "module",
+  "scripts": {
+    "test": "node --loader ts-node/esm src/utils/timeUtils.test.ts"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
