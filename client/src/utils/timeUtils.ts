@@ -92,12 +92,13 @@ export function convertTime(
     let hour = 0;
     let minute = 0;
     
-    // Find the timezone objects to check if they have an ianaTimezone property
+    // Find the timezone objects with standard IANA timezone identifiers
     const fromTimezoneObj = timezones.find(tz => tz.value === fromTimezone);
     const toTimezoneObj = timezones.find(tz => tz.value === toTimezone);
     
-    const actualFromTimezone = fromTimezoneObj?.ianaTimezone || fromTimezone;
-    const actualToTimezone = toTimezoneObj?.ianaTimezone || toTimezone;
+    // Use the value directly as we've standardized all timezone values to valid IANA identifiers
+    const actualFromTimezone = fromTimezone;
+    const actualToTimezone = toTimezone;
     
     // Handle different time formats
     if (time.includes('AM') || time.includes('PM')) {
@@ -162,9 +163,8 @@ export function convertTime(
 export function getCurrentTimeInTimezone(timezone: string): { time: string; date: string } {
   const now = new Date();
   
-  // Find the timezone object to check if it has an ianaTimezone property
-  const timezoneObj = timezones.find(tz => tz.value === timezone);
-  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
+  // Use the IANA timezone identifier directly
+  const actualTimezone = timezone;
   
   return {
     time: formatInTimeZone(now, actualTimezone, TIME_FORMAT),
@@ -219,9 +219,8 @@ export function addLocalTimeToTeamMembers(
     // Parse the current time and working hours in the member's timezone
     const now = parseISO(`${date}T${time}`);
     
-    // Find the timezone object to check if it has an ianaTimezone property
-    const timezoneObj = timezones.find(tz => tz.value === member.timeZone);
-    const actualTimezone = timezoneObj?.ianaTimezone || member.timeZone;
+    // Use the IANA timezone identifier directly
+    const actualTimezone = member.timeZone;
     
     // Parse the working hours in the local timezone
     const todayStr = formatInTimeZone(new Date(), actualTimezone, 'yyyy-MM-dd');
@@ -256,9 +255,8 @@ export function generateGoogleCalendarUrl(meeting: {
 }): string {
   const { title, date, startTime, endTime, timezone, description = '' } = meeting;
   
-  // Find the timezone object to check if it has an ianaTimezone property
-  const timezoneObj = timezones.find(tz => tz.value === timezone);
-  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
+  // Use the IANA timezone identifier directly
+  const actualTimezone = timezone;
   
   // Format date and times for Google Calendar
   const startDateTime = formatISO(parseISO(`${date}T${startTime}`));
@@ -285,9 +283,8 @@ export function generateAppleCalendarUrl(meeting: {
 }): string {
   const { title, date, startTime, endTime, timezone, description = '' } = meeting;
   
-  // Find the timezone object to check if it has an ianaTimezone property
-  const timezoneObj = timezones.find(tz => tz.value === timezone);
-  const actualTimezone = timezoneObj?.ianaTimezone || timezone;
+  // Use the IANA timezone identifier directly
+  const actualTimezone = timezone;
   
   // Format date and times for iCalendar format
   const startDateTime = formatISO(parseISO(`${date}T${startTime}`));
